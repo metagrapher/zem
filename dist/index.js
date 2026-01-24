@@ -8,6 +8,28 @@ var atomic = (fn) => {
     return Err(e.message || String(e));
   }
 };
+var atomicAsync = async (fn) => {
+  try {
+    return Ok(await fn());
+  } catch (e) {
+    return Err(e.message || String(e));
+  }
+};
+var fromPromise = async (promise) => {
+  try {
+    const value = await promise;
+    return Ok(value);
+  } catch (e) {
+    return Err(e.message || String(e));
+  }
+};
+var Result = {
+  fromPromise,
+  Ok,
+  Err,
+  atomic,
+  atomicAsync
+};
 
 // src/logic/choice.ts
 var choice = (...results) => results.find((r) => r.ok) || results[results.length - 1] || Err("EMPTY_CHOICE");
@@ -61,7 +83,9 @@ var fromHex = (hex) => {
 export {
   Err,
   Ok,
+  Result,
   atomic,
+  atomicAsync,
   chain,
   choice,
   compose,
@@ -70,6 +94,7 @@ export {
   fold,
   formatDate,
   fromHex,
+  fromPromise,
   identity,
   map,
   pipe,
