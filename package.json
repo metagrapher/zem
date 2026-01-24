@@ -1,0 +1,34 @@
+{
+    "name": "@zem/core",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "Zero-Exception Monadic Methodology Core Library",
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        }
+    },
+    "scripts": {
+        "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+        "test": "vitest run",
+        "dev": "tsup src/index.ts --format esm --watch --dts"
+    },
+    "keywords": [
+        "monad",
+        "functional",
+        "result",
+        "zero-exception",
+        "zem"
+    ],
+    "author": "Metagrapher",
+    "license": "MIT",
+    "devDependencies": {
+        "tsup": "^8.3.5",
+        "typescript": "^5.9.3",
+        "vitest": "^4.0.17"
+    }
+}
