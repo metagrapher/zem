@@ -22,7 +22,9 @@ var index_exports = {};
 __export(index_exports, {
   Err: () => Err,
   Ok: () => Ok,
+  Result: () => Result,
   atomic: () => atomic,
+  atomicAsync: () => atomicAsync,
   chain: () => chain,
   choice: () => choice,
   compose: () => compose,
@@ -31,6 +33,7 @@ __export(index_exports, {
   fold: () => fold,
   formatDate: () => formatDate,
   fromHex: () => fromHex,
+  fromPromise: () => fromPromise,
   identity: () => identity,
   map: () => map,
   pipe: () => pipe,
@@ -51,6 +54,28 @@ var atomic = (fn) => {
   } catch (e) {
     return Err(e.message || String(e));
   }
+};
+var atomicAsync = async (fn) => {
+  try {
+    return Ok(await fn());
+  } catch (e) {
+    return Err(e.message || String(e));
+  }
+};
+var fromPromise = async (promise) => {
+  try {
+    const value = await promise;
+    return Ok(value);
+  } catch (e) {
+    return Err(e.message || String(e));
+  }
+};
+var Result = {
+  fromPromise,
+  Ok,
+  Err,
+  atomic,
+  atomicAsync
 };
 
 // src/logic/choice.ts
@@ -106,7 +131,9 @@ var fromHex = (hex) => {
 0 && (module.exports = {
   Err,
   Ok,
+  Result,
   atomic,
+  atomicAsync,
   chain,
   choice,
   compose,
@@ -115,6 +142,7 @@ var fromHex = (hex) => {
   fold,
   formatDate,
   fromHex,
+  fromPromise,
   identity,
   map,
   pipe,

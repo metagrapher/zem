@@ -1,3 +1,11 @@
+declare const Ok: <T>(value: T) => Result<T, never>;
+declare const Err: <E>(error: E) => Result<never, E>;
+declare const atomic: <T>(fn: () => T) => Result<T>;
+/**
+ * atomicAsync: A non-throwing runner for async functions
+ */
+declare const atomicAsync: <T>(fn: () => Promise<T>) => Promise<Result<T>>;
+declare const fromPromise: <T>(promise: Promise<T>) => Promise<Result<T>>;
 /**
  * Result Pattern for Zero-Exception Methodology (ZEM)
  */
@@ -8,12 +16,13 @@ type Result<T, E = string> = {
     ok: false;
     error: E;
 };
-declare const Ok: <T>(value: T) => Result<T, never>;
-declare const Err: <E>(error: E) => Result<never, E>;
-/**
- * atomic: A non-throwing runner for functions that might throw
- */
-declare const atomic: <T>(fn: () => T) => Result<T>;
+declare const Result: {
+    fromPromise: <T>(promise: Promise<T>) => Promise<Result<T>>;
+    Ok: <T>(value: T) => Result<T, never>;
+    Err: <E>(error: E) => Result<never, E>;
+    atomic: <T>(fn: () => T) => Result<T>;
+    atomicAsync: <T>(fn: () => Promise<T>) => Promise<Result<T>>;
+};
 
 type Maybe<T> = Result<T, void>;
 type IO<T, E = string> = () => Result<T, E>;
@@ -47,4 +56,4 @@ declare const safeJSON: <T>(input: string) => Result<T>;
 declare const toHex: (buffer: ArrayBuffer) => string;
 declare const fromHex: (hex: string) => Uint8Array;
 
-export { Err, type IO, type Maybe, Ok, type Result, type State, atomic, chain, choice, compose, constant, curry, fold, formatDate, fromHex, identity, map, pipe, safeJSON, safeURL, sequence, tap, toHex };
+export { Err, type IO, type Maybe, Ok, Result, type State, atomic, atomicAsync, chain, choice, compose, constant, curry, fold, formatDate, fromHex, fromPromise, identity, map, pipe, safeJSON, safeURL, sequence, tap, toHex };

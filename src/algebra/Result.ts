@@ -11,12 +11,20 @@ export const Ok = <T,>(value: T): Result<T, never> =>
 export const Err = <E,>(error: E): Result<never, E> =>
     ({ ok: false, error })
 
-/**
- * atomic: A non-throwing runner for functions that might throw
- */
 export const atomic = <T>(fn: () => T): Result<T> => {
     try {
         return Ok(fn())
+    } catch (e: any) {
+        return Err(e.message || String(e))
+    }
+}
+
+/**
+ * atomicAsync: A non-throwing runner for async functions
+ */
+export const atomicAsync = async <T>(fn: () => Promise<T>): Promise<Result<T>> => {
+    try {
+        return Ok(await fn())
     } catch (e: any) {
         return Err(e.message || String(e))
     }
@@ -35,5 +43,6 @@ export const Result = {
     fromPromise,
     Ok,
     Err,
-    atomic
+    atomic,
+    atomicAsync
 }
