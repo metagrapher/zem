@@ -13,3 +13,5 @@
 - **Build Process**: Resolved `dist/` permission issues and hardened `tsup` configuration.
 ### Chores
 - **Git Hygiene**: Added comprehensive `.gitignore` and removed tracked artifacts (`node_modules/`, `dist/`).
+- **Enforcement**: Added `@metagrapher/zem/no-long-files` ESLint rule to enforce the 150-line limit.
+- **Specification**: Updated `docs/SPECIFICATION.md` to formally document the 150-line granularity rule.

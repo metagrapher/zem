@@ -60,5 +60,10 @@ To support the Zero-Exception Methodology, we employ algebraic structures that a
 - **State**: A monad that manages state transformations (`S -> [T, S]`) without mutable global variables.
 - **Monadic Choice**: The "Alternative" pattern, allowing for the selection of the first successful path among multiple monadic computations.
 
+### 9. File Length & Granularity
+To maintain mental model clarity and hardware-like specificity, no source file should exceed 150 lines.
+- **Rule**: If a file grows beyond 150 lines, it must be refactored into smaller, more focused modules.
+- **Rationale**: Smaller files are easier to reason about, test in isolation, and transfer to workers with minimal overhead.
+
 ---
 *This document serves as the technical definition for our coding standards. Adherence is non-negotiable.*
