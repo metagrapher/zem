@@ -9,7 +9,7 @@ export const formatDate = (date: Date) =>
             , day: "numeric"
         }).format(date)
 
-export const safeURL = (input: string | Request | URL | any): Result<URL> => {
+export const safeURL = (input: string | Request | URL | unknown): Result<URL> => {
     if (input instanceof URL) return Ok(input)
 
     const urlStr =

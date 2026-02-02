@@ -50,7 +50,7 @@ declare const pipe: <T>(value: T, ...fns: Function[]) => any;
 declare const compose: (...fns: Function[]) => (value: any) => any;
 
 declare const formatDate: (date: Date) => string;
-declare const safeURL: (input: string | Request | URL | any) => Result<URL>;
+declare const safeURL: (input: string | Request | URL | unknown) => Result<URL>;
 declare const safeJSON: <T>(input: string) => Result<T>;
 
 declare const toHex: (buffer: ArrayBuffer) => string;

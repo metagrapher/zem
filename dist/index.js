@@ -5,14 +5,14 @@ var atomic = (fn) => {
   try {
     return Ok(fn());
   } catch (e) {
-    return Err(e.message || String(e));
+    return Err(e instanceof Error ? e.message : String(e));
   }
 };
 var atomicAsync = async (fn) => {
   try {
     return Ok(await fn());
   } catch (e) {
-    return Err(e.message || String(e));
+    return Err(e instanceof Error ? e.message : String(e));
   }
 };
 var fromPromise = async (promise) => {
@@ -20,7 +20,7 @@ var fromPromise = async (promise) => {
     const value = await promise;
     return Ok(value);
   } catch (e) {
-    return Err(e.message || String(e));
+    return Err(e instanceof Error ? e.message : String(e));
   }
 };
 var Result = {

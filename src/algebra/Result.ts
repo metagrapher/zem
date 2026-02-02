@@ -14,8 +14,8 @@ export const Err = <E,>(error: E): Result<never, E> =>
 export const atomic = <T>(fn: () => T): Result<T> => {
     try {
         return Ok(fn())
-    } catch (e: any) {
-        return Err(e.message || String(e))
+    } catch (e: unknown) {
+        return Err(e instanceof Error ? e.message : String(e))
     }
 }
 
@@ -25,8 +25,8 @@ export const atomic = <T>(fn: () => T): Result<T> => {
 export const atomicAsync = async <T>(fn: () => Promise<T>): Promise<Result<T>> => {
     try {
         return Ok(await fn())
-    } catch (e: any) {
-        return Err(e.message || String(e))
+    } catch (e: unknown) {
+        return Err(e instanceof Error ? e.message : String(e))
     }
 }
 
@@ -34,8 +34,8 @@ export const fromPromise = async <T>(promise: Promise<T>): Promise<Result<T>> =>
     try {
         const value = await promise
         return Ok(value)
-    } catch (e: any) {
-        return Err(e.message || String(e))
+    } catch (e: unknown) {
+        return Err(e instanceof Error ? e.message : String(e))
     }
 }
 
