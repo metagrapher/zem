@@ -11,11 +11,14 @@ var leadingCommas = {
   create(context) {
     const sourceCode = context.getSourceCode();
     function checkCommas(node) {
-      const elementsOrProps = node.elements || node.properties;
+      const elementsOrProps = node.type === "ArrayExpression" ? node.elements : node.type === "ObjectExpression" ? node.properties : [];
       if (!elementsOrProps || elementsOrProps.length === 0) return;
-      elementsOrProps.forEach((elementOrProp, i) => {
-        if (i === 0) return;
-        const previousElementOrProp = elementsOrProps[i - 1];
+      elementsOrProps.forEach((item, i) => {
+        const elementOrProp = item;
+        if (i === 0 || !elementOrProp) return;
+        const previousItem = elementsOrProps[i - 1];
+        const previousElementOrProp = previousItem;
+        if (!previousElementOrProp || !elementOrProp.range || !previousElementOrProp.range) return;
         const previousEnd = previousElementOrProp.range[1];
         const currentStart = elementOrProp.range[0];
         const leadingText = sourceCode.getText().substring(previousEnd, currentStart).trim();
@@ -110,9 +113,14 @@ var rules = {
   "no-throw": noThrow,
   "no-any": noAny
 };
+var plugin = {
+  rules
+};
 var configs = {
   recommended: {
-    plugins: ["@metagrapher/zem"],
+    plugins: {
+      "@metagrapher/zem": plugin
+    },
     rules: {
       "@metagrapher/zem/leading-commas": "error",
       "@metagrapher/zem/no-loops": "error",
@@ -121,10 +129,7 @@ var configs = {
     }
   }
 };
-var plugin = {
-  rules,
-  configs
-};
+Object.assign(plugin, { configs });
 var eslint_default = plugin;
 export {
   configs,
