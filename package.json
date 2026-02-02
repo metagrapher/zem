@@ -25,6 +25,7 @@
         "lint": "eslint .",
         "structural-check": "node --loader ts-node/esm scripts/structural-audit.ts",
         "zem": "npm run structural-check && npm run typecheck && npm run test:coverage",
+        "watch:tests": "node --loader ts-node/esm scripts/scaffold-tests.ts",
         "dev": "tsup src/index.ts --format esm --watch --dts"
     },
     "keywords": [
