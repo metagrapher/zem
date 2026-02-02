@@ -89,5 +89,13 @@ export default [
 ];
 ```
 
+For projects that require larger file sizes, use the relaxed preset:
+
+```javascript
+export default [
+  zem.configs.relaxed,
+];
+```
+
 ---
 See [SPECIFICATION.md](./docs/SPECIFICATION.md) for the full methodology and [INSPIRATION.md](./docs/INSPIRATION.md) for our engineering standards.

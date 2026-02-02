@@ -64,6 +64,7 @@ To support the Zero-Exception Methodology, we employ algebraic structures that a
 To maintain mental model clarity and hardware-like specificity, source files must be atomic and highly focused.
 - **Rule**: No source file should exceed **75 lines** (Hard Error).
 - **Rule**: Files exceeding **40 lines** should be reviewed for potential refactoring (Warning).
+- **Note**: These limits are configurable via ESLint presets (e.g., `relaxed` allows 150/75).
 - **Rationale**: Smaller files are easier to reason about, test in isolation, and transfer to workers with zero memory overhead.
 
 ---

@@ -33,6 +33,19 @@ export const configs = {
       '@metagrapher/zem/file-granularity': 'warn',
     },
   },
+  relaxed: {
+    plugins: {
+      '@metagrapher/zem': plugin,
+    },
+    rules: {
+      '@metagrapher/zem/leading-commas': 'warn',
+      '@metagrapher/zem/no-loops': 'error',
+      '@metagrapher/zem/no-throw': 'error',
+      '@metagrapher/zem/no-any': 'error',
+      '@metagrapher/zem/no-long-files': ['error', { max: 150 }],
+      '@metagrapher/zem/file-granularity': ['warn', { threshold: 75, max: 150 }],
+    },
+  },
 }
 
 // Add configs to the plugin object for standard access
