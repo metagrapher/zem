@@ -60,11 +60,10 @@ To support the Zero-Exception Methodology, we employ algebraic structures that a
 - **State**: A monad that manages state transformations (`S -> [T, S]`) without mutable global variables.
 - **Monadic Choice**: The "Alternative" pattern, allowing for the selection of the first successful path among multiple monadic computations.
 
-### 9. File Length & Granularity
+### 9. File Length & Granularity (Spec A vs Spec B)
 To maintain mental model clarity and hardware-like specificity, source files must be atomic and highly focused.
-- **Rule**: No source file should exceed **75 lines** (Hard Error).
-- **Rule**: Files exceeding **40 lines** should be reviewed for potential refactoring (Warning).
-- **Note**: These limits are configurable via ESLint presets (e.g., `relaxed` allows 150/75).
+- **Spec A (Standard)**: 75-line hard limit (Error), 40-line warning threshold.
+- **Spec B (Alternative)**: 150-line hard limit (Error), 75-line warning threshold.
 - **Rationale**: Smaller files are easier to reason about, test in isolation, and transfer to workers with zero memory overhead.
 
 ---

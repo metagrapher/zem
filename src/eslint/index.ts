@@ -20,7 +20,7 @@ const plugin = {
 }
 
 export const configs = {
-  recommended: {
+  specA: {
     plugins: {
       '@metagrapher/zem': plugin,
     },
@@ -33,7 +33,7 @@ export const configs = {
       '@metagrapher/zem/file-granularity': 'warn',
     },
   },
-  relaxed: {
+  specB: {
     plugins: {
       '@metagrapher/zem': plugin,
     },
@@ -46,7 +46,10 @@ export const configs = {
       '@metagrapher/zem/file-granularity': ['warn', { threshold: 75, max: 150 }],
     },
   },
+  recommended: null as any, // assigned below
 }
+
+configs.recommended = configs.specA
 
 // Add configs to the plugin object for standard access
 Object.assign(plugin, { configs })

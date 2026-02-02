@@ -85,15 +85,15 @@ Or use the recommended preset:
 import zem from "@metagrapher/zem/eslint";
 
 export default [
-  zem.configs.recommended,
+  zem.configs.specA, // Standard: 75 lines max, 40 lines warning
 ];
 ```
 
-For projects that require larger file sizes, use the relaxed preset:
+For projects that require larger file sizes, use Spec B:
 
 ```javascript
 export default [
-  zem.configs.relaxed,
+  zem.configs.specB, // Alternative: 150 lines max, 75 lines warning
 ];
 ```
 
