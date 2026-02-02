@@ -12,19 +12,23 @@ export const leadingCommas: Rule.RuleModule = {
   create(context: Rule.RuleContext) {
     const sourceCode = context.getSourceCode()
 
-    interface NodeWithRange {
-      range: [number, number]
-    }
+    function checkCommas(node: Rule.Node) {
+      const elementsOrProps =
+        node.type === 'ArrayExpression' ? (node as unknown as { elements: (Rule.Node | null)[] }).elements :
+          node.type === 'ObjectExpression' ? (node as unknown as { properties: Rule.Node[] }).properties :
+            []
 
-    function checkCommas(node: { elements?: NodeWithRange[]; properties?: NodeWithRange[] }) {
-      const elementsOrProps = node.elements || node.properties
       if (!elementsOrProps || elementsOrProps.length === 0) return
 
       // Use functional methods instead of loops (ZEM Rule 0)
-      elementsOrProps.forEach((elementOrProp: NodeWithRange, i: number) => {
-        if (i === 0) return
+      elementsOrProps.forEach((item: unknown, i: number) => {
+        const elementOrProp = item as Rule.Node | null
+        if (i === 0 || !elementOrProp) return
 
-        const previousElementOrProp = elementsOrProps[i - 1]
+        const previousItem = elementsOrProps[i - 1]
+        const previousElementOrProp = previousItem as Rule.Node | null
+        if (!previousElementOrProp || !elementOrProp.range || !previousElementOrProp.range) return
+
         const previousEnd = previousElementOrProp.range[1]
         const currentStart = elementOrProp.range[0]
         const leadingText = sourceCode.getText().substring(previousEnd, currentStart).trim()
