@@ -3,6 +3,7 @@ import { noLoops } from './rules/no-loops'
 import { noThrow } from './rules/no-throw'
 import { noAny } from './rules/no-any'
 import { noLongFiles } from './rules/no-long-files'
+import { fileGranularity } from './rules/file-granularity'
 
 
 export const rules = {
@@ -11,6 +12,7 @@ export const rules = {
   'no-throw': noThrow,
   'no-any': noAny,
   'no-long-files': noLongFiles,
+  'file-granularity': fileGranularity,
 }
 
 const plugin = {
@@ -28,6 +30,7 @@ export const configs = {
       '@metagrapher/zem/no-throw': 'error',
       '@metagrapher/zem/no-any': 'error',
       '@metagrapher/zem/no-long-files': 'error',
+      '@metagrapher/zem/file-granularity': 'warn',
     },
   },
 }

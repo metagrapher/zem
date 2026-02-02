@@ -61,9 +61,10 @@ To support the Zero-Exception Methodology, we employ algebraic structures that a
 - **Monadic Choice**: The "Alternative" pattern, allowing for the selection of the first successful path among multiple monadic computations.
 
 ### 9. File Length & Granularity
-To maintain mental model clarity and hardware-like specificity, no source file should exceed 150 lines.
-- **Rule**: If a file grows beyond 150 lines, it must be refactored into smaller, more focused modules.
-- **Rationale**: Smaller files are easier to reason about, test in isolation, and transfer to workers with minimal overhead.
+To maintain mental model clarity and hardware-like specificity, source files must be atomic and highly focused.
+- **Rule**: No source file should exceed **75 lines** (Hard Error).
+- **Rule**: Files exceeding **40 lines** should be reviewed for potential refactoring (Warning).
+- **Rationale**: Smaller files are easier to reason about, test in isolation, and transfer to workers with zero memory overhead.
 
 ---
 *This document serves as the technical definition for our coding standards. Adherence is non-negotiable.*

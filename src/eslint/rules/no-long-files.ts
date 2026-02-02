@@ -4,7 +4,7 @@ export const noLongFiles: Rule.RuleModule = {
     meta: {
         type: 'suggestion',
         docs: {
-            description: 'Enforce a maximum file length of 150 lines',
+            description: 'Enforce a maximum file length of 75 lines',
         },
         schema: [
             {
@@ -19,7 +19,7 @@ export const noLongFiles: Rule.RuleModule = {
         ],
     },
     create(context: Rule.RuleContext) {
-        const maxLines = context.options[0]?.max || 150
+        const maxLines = context.options[0]?.max || 75
         const sourceCode = context.getSourceCode()
         const lineCount = sourceCode.getLines().length
 
