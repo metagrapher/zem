@@ -8,9 +8,14 @@
         "outDir": "dist",
         "skipLibCheck": true,
         "esModuleInterop": true,
-        "isolatedModules": true
+        "isolatedModules": true,
+        "allowJs": true
     },
     "include": [
-        "src"
+        "src",
+        "scripts",
+        "vitest.config.ts",
+        "eslint.config.js",
+        "docs"
     ]
 }

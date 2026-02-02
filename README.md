@@ -38,6 +38,26 @@ const result = pipe(
 ```typescript
 import { choice, Err, Ok } from '@metagrapher/zem'
 
+## Terminal Gating
+
+ZEM enforces a strict "Terminal Gating" policy to ensure code acts like hardware. No logic enters the repository without 100% verification.
+
+### Enforcement Rules
+1. **100% Test Coverage**: Every line, branch, and function must be covered by Vitest.
+2. **Structural Integrity**: Every `.ts` module in `src/` must have a corresponding `.test.ts` or `.spec.ts` file.
+3. **Mechanical Gating**: A git pre-commit hook prevents commits if linting, typechecking, tests, or structural audits fail.
+
+### CLI Commands
+- `npm run zem`: Runs the full audit (structural check, typecheck, lint, and coverage).
+- `npm run structural-check`: Audits the directory structure for missing tests.
+- `npm run test:coverage`: Executes tests and enforces the 100% threshold.
+
+### Setup
+To install the pre-commit hook locally, run:
+```bash
+node scripts/setup-hooks.js
+```
+
 const val = choice(
   Err('fail'),
   Ok('success'),

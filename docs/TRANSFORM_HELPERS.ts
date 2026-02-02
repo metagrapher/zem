@@ -1,4 +1,4 @@
-import { type Result, Ok } from '../algebra/Result'
+import { type Result, Ok } from '../src/algebra/Result'
 
 export const chain = <T, E, U>(result: Result<T, E>, fn: (val: T) => Result<U, E>): Result<U, E> =>
     result.ok ? fn(result.value) : result as unknown as Result<U, E>

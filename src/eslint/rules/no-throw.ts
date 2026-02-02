@@ -10,7 +10,7 @@ export const noThrow: Rule.RuleModule = {
   },
   create(context: Rule.RuleContext) {
     return {
-      ThrowStatement(node: unknown) {
+      ThrowStatement(node: any) {
         context.report({ node, message: 'Throwing is forbidden in ZEM. Use Ok(value) / Err(error) to handle failures.' })
       },
     }

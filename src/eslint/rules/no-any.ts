@@ -10,7 +10,7 @@ export const noAny: Rule.RuleModule = {
   },
   create(context: Rule.RuleContext) {
     return {
-      TSAnyKeyword(node: unknown) {
+      TSAnyKeyword(node: any) {
         context.report({ node, message: 'The "any" type is forbidden in ZEM. Use "unknown" or define specific types.' })
       },
     }
