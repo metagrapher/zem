@@ -11,3 +11,5 @@
 ### Fixed
 - **Type Safety**: Improved type resolution for ESLint rules.
 - **Build Process**: Resolved `dist/` permission issues and hardened `tsup` configuration.
+### Chores
+- **Git Hygiene**: Added comprehensive `.gitignore` and removed tracked artifacts (`node_modules/`, `dist/`).
