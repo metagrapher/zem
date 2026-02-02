@@ -90,4 +90,4 @@ export default [
 ```
 
 ---
-See [SPECIFICATION.md](./docs/SPECIFICATION.md) for the full methodology.
+See [SPECIFICATION.md](./docs/SPECIFICATION.md) for the full methodology and [INSPIRATION.md](./docs/INSPIRATION.md) for our engineering standards.
