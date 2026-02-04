@@ -4,7 +4,7 @@ The **Zero-Exception Methodology (ZEM)** is deeply influenced by high-reliabilit
 
 ## Primary Reference
 
-[Joint Strike Fighter Air Vehicle C++ Coding Standards (Doc. 2RDU00001 Rev. C)](https://github.com/tpn/pdfs/blob/master/Joint%20Strike%20Fighter%20Air%20Vehicle%20C%2B%2B%20Coding%20Standards%20-%20Dec%202005%20(Doc.%202RDU00001%20Rev.%20C).pdf)
+[Joint Strike Fighter Air Vehicle C++ Coding Standards (Doc. 2RDU00001 Rev. C)](./JSF-Air-Vehicle-C++-Coding-Standards.pdf) ([Remote Mirror](https://github.com/tpn/pdfs/blob/master/Joint%20Strike%20Fighter%20Air%20Vehicle%20C%2B%2B%20Coding%20Standards%20-%20Dec%202005%20(Doc.%202RDU00001%20Rev.%20C).pdf))
 
 ## Philosophical Alignment
 
