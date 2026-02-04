@@ -10,4 +10,8 @@ describe('choice', () => {
     it('should return the last Err if all fail', () => {
         expect(choice(Err('fail1'), Err('fail2'))).toEqual(Err('fail2'))
     })
+
+    it('should return EMPTY_CHOICE if no arguments provided', () => {
+        expect((choice() as any).error).toBe('EMPTY_CHOICE')
+    })
 })

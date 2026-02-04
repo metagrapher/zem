@@ -19,11 +19,8 @@ export default defineConfig({
                 '**/*.test.ts',
                 '**/*.spec.ts',
                 'src/index.ts', // Entry point usually just exports
-                'src/eslint/rules/**', // TODO: Expand rule suites for deep coverage
-                'src/logic/web.ts', // TODO: Add tests for formatDate and safeURL
-                'src/logic/choice.ts',
-                'src/logic/transform.ts',
-                'src/binary/hex.ts',
+                'src/algebra/Monads.ts', // Type definitions only
+                'src/eslint/rules/**', // TODO: Expand RuleTester suites for 100% rule coverage
                 '**/Indexer.ts',
             ],
         },

@@ -7,4 +7,8 @@ describe('hex', () => {
         const hex = toHex(buffer)
         expect(fromHex(hex)).toEqual(new Uint8Array(buffer))
     })
+
+    it('fromHex should handle empty string', () => {
+        expect(fromHex('')).toEqual(new Uint8Array([]))
+    })
 })
