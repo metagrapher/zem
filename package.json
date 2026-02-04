@@ -6,6 +6,9 @@
     "main": "./dist/index.js",
     "module": "./dist/index.js",
     "types": "./dist/index.d.ts",
+    "bin": {
+        "zem": "./bin/zem.js"
+    },
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
@@ -38,8 +41,10 @@
     "author": "Metagrapher",
     "license": "MIT",
     "devDependencies": {
+        "@metagrapher/zem": "file:.",
         "@types/eslint": "^9.6.1",
         "@types/node": "^25.2.0",
+        "@vitest/coverage-v8": "^4.0.18",
         "eslint": "^9.20.1",
         "ts-node": "^10.9.2",
         "tsup": "^8.3.5",

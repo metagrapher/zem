@@ -22,16 +22,22 @@ const isIgnored = (path: string) => {
     return IGNORED_FILES.includes(fileName) || IGNORED_EXT.some(ext => fileName.endsWith(ext)) || fileName.includes('.test.ts') || fileName.includes('.spec.ts')
 }
 
+const CODE_EXTENSIONS = ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs', '.astro', '.css', '.wasm']
+
 const checkStructuralIntegrity = () => {
-    const srcFiles = getAllFiles(SRC_DIR).filter(file => file.endsWith('.ts') && !isIgnored(file))
+    const srcFiles = getAllFiles(SRC_DIR).filter(file => {
+        const ext = file.substring(file.lastIndexOf('.'))
+        return CODE_EXTENSIONS.includes(ext) && !isIgnored(file)
+    })
     const missingTests: string[] = []
 
     srcFiles.forEach(file => {
         const relPath = relative(SRC_DIR, file)
-        const testFileSameDir = file.replace(/\.ts$/, '.test.ts')
-        const specFileSameDir = file.replace(/\.ts$/, '.spec.ts')
-        const testFileInTests = join(TEST_DIR, relPath.replace(/\.ts$/, '.test.ts'))
-        const specFileInTests = join(TEST_DIR, relPath.replace(/\.ts$/, '.spec.ts'))
+        const ext = file.substring(file.lastIndexOf('.'))
+        const testFileSameDir = file.replace(ext, '.test.ts')
+        const specFileSameDir = file.replace(ext, '.spec.ts')
+        const testFileInTests = join(TEST_DIR, relPath.replace(ext, '.test.ts'))
+        const specFileInTests = join(TEST_DIR, relPath.replace(ext, '.spec.ts'))
 
         const hasTest = existsSync(testFileSameDir) ||
             existsSync(specFileSameDir) ||

@@ -16,6 +16,8 @@
         "scripts",
         "vitest.config.ts",
         "eslint.config.js",
-        "docs"
+        "docs",
+        "bin",
+        "package.json"
     ]
 }

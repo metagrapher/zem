@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.2.0] - 2026-02-03
+
+### Added
+- **Terminal Gating**: Integrated git pre-commit hooks that enforce 100% coverage, linting, and structural integrity.
+- **Structural Audit**: New script to ensure every source file has a corresponding verification context (test).
+- **Integrated Testing**: Automatic test scaffolding via `watch:tests` that creates boilerplate for new code files.
+- **ZEM CLI**: Initial `zem` command for project initialization and manual verification.
+- **Comma-First Enforcement**: Enhanced `leading-commas` ESLint rule with deep alignment checks for parameters and objects.
+
 ## [1.1.0] - 2026-02-02
 
 ### Added

@@ -1,55 +1,47 @@
 import { writeFileSync, chmodSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 const HOOKS_DIR = join(process.cwd(), '.git', 'hooks')
-const PRE_COMMIT_PATH = join(HOOKS_DIR, 'pre-commit')
 
-const PRE_COMMIT_CONTENT = `#!/bin/sh
-# ZEM Terminal Gating Hook
+export const setupHooks = () => {
+    const HOOK_PATH = join(HOOKS_DIR, 'pre-commit')
 
-echo "[\x1b[34mZEM\x1b[0m] Initiating Full Audit..."
-
-# 1. Structural Integrity Check
-npm run structural-check
+    const hookContent = `#!/bin/sh
+# ZEM: Zero Exception Method Terminal Gating
+echo "[\\x1b[34mZEM\\x1b[0m] Initiating Full Audit..."
+npm run zem
 if [ $? -ne 0 ]; then
-    echo "\x1b[31mFAIL: Structural Integrity Check Failed.\x1b[0m"
+    echo "\\x1b[31mFAIL: Verification Failed. Commit Aborted.\\x1b[0m"
     exit 1
 fi
-
-# 2. Type Check
-npm run typecheck
-if [ $? -ne 0 ]; then
-    echo "\x1b[31mFAIL: Type Check Failed.\x1b[0m"
-    exit 1
-fi
-
-# 3. Lint
-npm run lint
-if [ $? -ne 0 ]; then
-    echo "\x1b[31mFAIL: Linting Failed.\x1b[0m"
-    exit 1
-fi
-
-# 4. Test with Coverage
-npm run test:coverage
-if [ $? -ne 0 ]; then
-    echo "\x1b[31mFAIL: Tests or Coverage Failed.\x1b[0m"
-    exit 1
-fi
-
-echo "\x1b[32mPASS: Full Audit Successful. Committing...\x1b[0m"
-exit 0
+echo "\\x1b[32mPASS: Full Audit Successful. Committing...\\x1b[0m"
 `
 
-const setupHooks = () => {
     if (!existsSync(HOOKS_DIR)) {
-        console.error('Error: .git directory not found. Please run this in the project root.')
-        process.exit(1)
+        console.error('ERROR: .git/hooks directory not found. Are you in a git repository?')
+        return
     }
 
-    writeFileSync(PRE_COMMIT_PATH, PRE_COMMIT_CONTENT)
-    chmodSync(PRE_COMMIT_PATH, '755')
-    console.log('\x1b[32m%s\x1b[0m', 'SIGNAL OK: ZEM Terminal Gating Hook installed.')
+    try {
+        writeFileSync(HOOK_PATH, hookContent)
+        chmodSync(HOOK_PATH, '755')
+        console.log('\\x1b[32m%s\\x1b[0m', '✓ ZEM Terminal Gating installed successfully at .git/hooks/pre-commit')
+    } catch (err) {
+        console.error('FAIL: Could not install git hook:', err.message)
+    }
 }
 
-setupHooks()
+// Run if called directly
+const isDirect = () => {
+    try {
+        const currentFile = fileURLToPath(import.meta.url)
+        return currentFile === process.argv[1]
+    } catch {
+        return false
+    }
+}
+
+if (isDirect()) {
+    setupHooks()
+}

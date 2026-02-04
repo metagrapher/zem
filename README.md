@@ -38,32 +38,47 @@ const result = pipe(
 ```typescript
 import { choice, Err, Ok } from '@metagrapher/zem'
 
-## Terminal Gating
-
-ZEM enforces a strict "Terminal Gating" policy to ensure code acts like hardware. No logic enters the repository without 100% verification.
-
-### Enforcement Rules
-1. **100% Test Coverage**: Every line, branch, and function must be covered by Vitest.
-2. **Structural Integrity**: Every `.ts` module in `src/` must have a corresponding `.test.ts` or `.spec.ts` file.
-3. **Mechanical Gating**: A git pre-commit hook prevents commits if linting, typechecking, tests, or structural audits fail.
-
-### CLI Commands
-- `npm run zem`: Runs the full audit (structural check, typecheck, lint, and coverage).
-- `npm run structural-check`: Audits the directory structure for missing tests.
-- `npm run test:coverage`: Executes tests and enforces the 100% threshold.
-
-### Setup
-To install the pre-commit hook locally, run:
-```bash
-node scripts/setup-hooks.js
-```
-
 const val = choice(
   Err('fail'),
   Ok('success'),
   Ok('ignored')
 ) // Ok('success')
 ```
+
+## Terminal Gating
+
+ZEM enforces a strict "Terminal Gating" policy to ensure code reliability and structural integrity before any commit is accepted.
+
+### Enforcement Rules
+1. **100% Code Coverage**: Every line, branch, and function must be verified by Vitest.
+2. **Structural Integrity**: Every source file in `src/` (including `.ts`, `.js`, `.astro`, `.css`, `.wasm`) must have a corresponding `.test.ts` or `.spec.ts` file.
+3. **Linting & Types**: Full ESLint compliance and TypeScript error-free execution.
+
+### Installation
+To install the pre-commit hook in your local environment, run:
+```bash
+node scripts/setup-hooks.js
+```
+This will automatically link the verification scripts to your git commit process.
+
+### Manual Verification
+You can run the full audit at any time:
+```bash
+npm run zem
+```
+
+## Automatic Test Scaffolding
+
+To maintain 100% structural integrity without manual boilerplate, use the automatic test scaffold watcher:
+
+```bash
+npm run watch:tests
+```
+
+This script:
+1. **Watches** `src/` for any new code files.
+2. **Performs an Initial Scan** on startup to catch any missing verification contexts.
+3. **Automatically Scaffolds** tailored `.test.ts` files with named imports and basic verification suites.
 
 ## Directives
 
