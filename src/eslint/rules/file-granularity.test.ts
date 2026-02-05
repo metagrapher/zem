@@ -1,9 +1,10 @@
-import { describe, it, expect } from 'vitest'
-import { fileGranularity as rule } from './file-granularity'
+import { describe, it } from 'node:test'
+import assert from 'node:assert/strict'
+import { fileGranularity as rule } from './file-granularity.ts'
 
 describe('eslint-rule: file-granularity', () => {
     it('should be an ESLint rule object', () => {
-        expect(rule).toHaveProperty('create')
-        expect(rule).toHaveProperty('meta')
+        assert.ok(rule.create)
+        assert.ok(rule.meta)
     })
 })

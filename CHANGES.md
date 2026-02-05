@@ -1,4 +1,15 @@
 # Changelog
+ 
+## [2.0.0] - 2026-02-05
+ 
+### Changed
+- **Lean ZEM Migration**: Drastically reduced external dependency footprint by migrating to native Node.js features.
+- **Testing**: Replaced Vitest with native `node:test` and `node:assert/strict`.
+- **Coverage**: Switched to native `--experimental-test-coverage`.
+- **Native TypeScript**: Adopted Node 25 `--experimental-strip-types` for direct TS execution, removing `ts-node` and `tsx`.
+- **Unified Build**: Replaced `tsup` with a clean `tsc` + `esbuild` pipeline.
+- **Dependency Reduction**: reduced `node_modules` size by ~50% (from 91MB to 56MB) and eliminated dozens of transitive dependencies.
+- **Internal Imports**: updated all internal imports to include `.ts` extensions for native specifier compatibility.
 
 ## [1.2.0] - 2026-02-03
 

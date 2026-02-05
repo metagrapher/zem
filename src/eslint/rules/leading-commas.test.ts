@@ -1,9 +1,10 @@
-import { describe, it, expect } from 'vitest'
-import { leadingCommas as rule } from './leading-commas'
+import { describe, it } from 'node:test'
+import assert from 'node:assert/strict'
+import { leadingCommas as rule } from './leading-commas.ts'
 
 describe('eslint-rule: leading-commas', () => {
     it('should be an ESLint rule object', () => {
-        expect(rule).toHaveProperty('create')
-        expect(rule).toHaveProperty('meta')
+        assert.ok(rule.create)
+        assert.ok(rule.meta)
     })
 })

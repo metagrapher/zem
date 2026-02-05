@@ -1,9 +1,9 @@
-import { leadingCommas } from './rules/leading-commas'
-import { noLoops } from './rules/no-loops'
-import { noThrow } from './rules/no-throw'
-import { noAny } from './rules/no-any'
-import { noLongFiles } from './rules/no-long-files'
-import { fileGranularity } from './rules/file-granularity'
+import { leadingCommas } from './rules/leading-commas.ts'
+import { noLoops } from './rules/no-loops.ts'
+import { noThrow } from './rules/no-throw.ts'
+import { noAny } from './rules/no-any.ts'
+import { noLongFiles } from './rules/no-long-files.ts'
+import { fileGranularity } from './rules/file-granularity.ts'
 
 
 export const rules = {

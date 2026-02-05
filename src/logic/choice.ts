@@ -1,4 +1,4 @@
-import { type Result, Err } from '../algebra/Result'
+import { type Result, Err } from '../algebra/Result.ts'
 
 /**
  * choice: Selects the first successful Result or returns the last error.

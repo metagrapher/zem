@@ -50,7 +50,7 @@ const val = choice(
 ZEM enforces a strict "Terminal Gating" policy to ensure code reliability and structural integrity before any commit is accepted.
 
 ### Enforcement Rules
-1. **100% Code Coverage**: Every line, branch, and function must be verified by Vitest.
+1. **100% Code Coverage**: Every line, branch, and function must be verified by the native Node.js test runner.
 2. **Structural Integrity**: Every source file in `src/` (including `.ts`, `.js`, `.astro`, `.css`, `.wasm`) must have a corresponding `.test.ts` or `.spec.ts` file.
 3. **Linting & Types**: Full ESLint compliance and TypeScript error-free execution.
 

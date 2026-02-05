@@ -1,13 +1,14 @@
-import { describe, it, expect } from 'vitest'
-import { rules, configs } from './index'
+import { describe, it } from 'node:test'
+import assert from 'node:assert/strict'
+import { rules, configs } from './index.ts'
 
 describe('index', () => {
     it('rules should correspond to requirements', () => {
-        expect(rules).toBeDefined()
+        assert.ok(rules)
     })
 
     it('configs should correspond to requirements', () => {
-        expect(configs).toBeDefined()
+        assert.ok(configs)
     })
 
 })

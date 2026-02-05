@@ -1,17 +1,18 @@
-import { describe, it, expect } from 'vitest'
-import { Ok, Err } from '../algebra/Result'
-import { choice } from './choice'
+import { describe, it } from 'node:test'
+import assert from 'node:assert/strict'
+import { Ok, Err } from '../algebra/Result.ts'
+import { choice } from './choice.ts'
 
 describe('choice', () => {
     it('should return the first Ok result', () => {
-        expect(choice(Err('fail'), Ok('success'))).toEqual(Ok('success'))
+        assert.deepEqual(choice(Err('fail'), Ok('success')), Ok('success'))
     })
 
     it('should return the last Err if all fail', () => {
-        expect(choice(Err('fail1'), Err('fail2'))).toEqual(Err('fail2'))
+        assert.deepEqual(choice(Err('fail1'), Err('fail2')), Err('fail2'))
     })
 
     it('should return EMPTY_CHOICE if no arguments provided', () => {
-        expect((choice() as any).error).toBe('EMPTY_CHOICE')
+        assert.equal((choice() as any).error, 'EMPTY_CHOICE')
     })
 })

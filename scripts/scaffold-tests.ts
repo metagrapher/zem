@@ -32,28 +32,29 @@ const processFile = (filename: string) => {
     console.log(`[ZEM] Detected new file: ${filename}`)
 
     try {
-        let testContent = `import { describe, it, expect } from 'vitest'\n`
+        let testContent = `import { describe, it } from 'node:test'\n`
+        testContent += `import assert from 'node:assert/strict'\n`
         const relativePath = `./${basename(filename)}`
 
         if (ext === '.astro') {
             testContent += `import Component from '${relativePath}'\n`
             testContent += `\ndescribe('${filename}', () => {\n`
             testContent += `    it('should export a valid component', () => {\n`
-            testContent += `        expect(Component).toBeDefined()\n`
+            testContent += `        assert.ok(Component)\n`
             testContent += `    })\n`
             testContent += `})\n`
         } else if (ext === '.css') {
             testContent += `import styles from '${relativePath}'\n`
             testContent += `\ndescribe('${filename}', () => {\n`
             testContent += `    it('should be importable', () => {\n`
-            testContent += `        expect(styles).toBeDefined()\n`
+            testContent += `        assert.ok(styles)\n`
             testContent += `    })\n`
             testContent += `})\n`
         } else if (ext === '.wasm') {
             testContent += `import wasm from '${relativePath}'\n`
             testContent += `\ndescribe('${filename}', () => {\n`
             testContent += `    it('should be a valid WASM module', () => {\n`
-            testContent += `        expect(wasm).toBeDefined()\n`
+            testContent += `        assert.ok(wasm)\n`
             testContent += `    })\n`
             testContent += `})\n`
         } else {
@@ -69,9 +70,9 @@ const processFile = (filename: string) => {
             }
 
             if (exports.length > 0) {
-                testContent += `import { ${exports.join(', ')} } from './${base}'\n`
+                testContent += `import { ${exports.join(', ')} } from './${base}.ts'\n`
             } else {
-                testContent += `import * as module from './${base}'\n`
+                testContent += `import * as module from './${base}.ts'\n`
             }
 
             testContent += `\ndescribe('${base}', () => {\n`
@@ -79,12 +80,12 @@ const processFile = (filename: string) => {
             if (exports.length > 0) {
                 exports.forEach(exp => {
                     testContent += `    it('${exp} should correspond to requirements', () => {\n`
-                    testContent += `        expect(${exp}).toBeDefined()\n`
+                    testContent += `        assert.ok(${exp})\n`
                     testContent += `    })\n\n`
                 })
             } else {
                 testContent += `    it('should exist', () => {\n`
-                testContent += `        expect(module).toBeDefined()\n`
+                testContent += `        assert.ok(module)\n`
                 testContent += `    })\n`
             }
             testContent += `})\n`

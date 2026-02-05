@@ -1,4 +1,4 @@
-import { type Result, Ok, atomic } from '../algebra/Result'
+import { type Result, Ok, atomic } from '../algebra/Result.ts'
 
 export const formatDate = (date: Date) =>
     new Intl.DateTimeFormat("en-US",

@@ -1,9 +1,10 @@
-import { describe, it, expect } from 'vitest'
-import { noThrow as rule } from './no-throw'
+import { describe, it } from 'node:test'
+import assert from 'node:assert/strict'
+import { noThrow as rule } from './no-throw.ts'
 
 describe('eslint-rule: no-throw', () => {
     it('should be an ESLint rule object', () => {
-        expect(rule).toHaveProperty('create')
-        expect(rule).toHaveProperty('meta')
+        assert.ok(rule.create)
+        assert.ok(rule.meta)
     })
 })

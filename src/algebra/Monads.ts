@@ -1,4 +1,4 @@
-import type { Result } from './Result'
+import type { Result } from './Result.ts'
 
 export type Maybe<T> = Result<T, void>
 
