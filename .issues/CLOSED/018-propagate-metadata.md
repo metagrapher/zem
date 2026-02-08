@@ -1,5 +1,5 @@
 ---
-title: Propagate metadata to GitHub issue body
+title: "Propagate metadata to GitHub issue body"
 status: CLOSED
 gh_number: 18
 ---

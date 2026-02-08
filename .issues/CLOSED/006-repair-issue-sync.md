@@ -1,5 +1,5 @@
 ---
-title: Repair Issue Synchronization
+title: "Repair Issue Synchronization"
 status: CLOSED
 gh_number: 6
 ---

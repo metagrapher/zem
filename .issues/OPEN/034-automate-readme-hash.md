@@ -1,11 +1,12 @@
 ---
-title: Automate README Install Hash Updates
+title: "Automate README Install Hash Updates"
 type: task
 status: open
 priority: high
 test_ref: scripts/update-readme-hash.test.ts
+verification: FAIL
+gh_number: 34
 ---
-
 # Objective
 The README installation instructions point to a specific commit hash for security and stability. This hash becomes stale as `primary` advances. We need an automated process to update this hash safely.
 

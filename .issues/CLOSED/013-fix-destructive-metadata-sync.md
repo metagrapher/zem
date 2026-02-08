@@ -1,5 +1,5 @@
 ---
-title: Fix destructive metadata synchronization in sync-issues.mjs
+title: "Fix destructive metadata synchronization in sync-issues.mjs"
 status: CLOSED
 gh_number: 13
 test_ref: src/logic/metadata.test.ts

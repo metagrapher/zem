@@ -1,10 +1,10 @@
 ---
-title: Fix npm install failure caused by missing @types/front-matter
+title: "Fix npm install failure caused by missing @types/front-matter"
 status: CLOSED
 gh_number: 30
 test_ref: tests/issue-028.test.mjs
+verification: PASS
 ---
-
 ## Description
 CI is failing because `@types/front-matter` is not found in the npm registry. Looking at `node_modules/front-matter`, it already includes an `index.d.ts` file, making `@types/front-matter` redundant.
 

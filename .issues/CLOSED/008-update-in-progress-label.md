@@ -1,5 +1,5 @@
 ---
-title: Update In Progress Label
+title: "Update In Progress Label"
 status: CLOSED
 gh_number: 8
 ---

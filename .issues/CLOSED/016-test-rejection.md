@@ -1,5 +1,5 @@
 ---
-title: Deprecated Rejection Test
+title: "Deprecated Rejection Test"
 status: CLOSED
 gh_number: 16
 test_ref: src/logic/identity.test.ts

@@ -1,5 +1,5 @@
 ---
-title: Fix Linting for sync-issues.mjs
+title: "Fix Linting for sync-issues.mjs"
 status: CLOSED
 gh_number: 5
 ---

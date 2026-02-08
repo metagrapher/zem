@@ -1,9 +1,8 @@
 ---
-title: Reorganize Verification and Integration Tests
+title: "Reorganize Verification and Integration Tests"
 status: OPEN
 gh_number: 22
 ---
-
 ## Description
 Current verification and integration tests (e.g., `issue-007.test.mjs`) are incorrectly placed in the `scripts/` directory. These should be moved to the legacy-empty `tests/` directory to maintain proper project organization and separate operational scripts from test verification logic.
 

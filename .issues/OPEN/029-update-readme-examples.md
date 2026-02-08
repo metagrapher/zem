@@ -1,9 +1,8 @@
 ---
-title: Update README with Accurate ZEM Usage Examples
+title: "Update README with Accurate ZEM Usage Examples"
 status: OPEN
 gh_number: 29
 ---
-
 ## Description
 The current `README.md` examples for `pipe` and `chain` are aspirational and do not reflect the current `(data, ...args)` API of the library. To follow the ZEM methodology, our documentation must be strictly accurate.
 
