@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { spawnSync } from 'child_process'
 import { Octokit } from '@octokit/rest'
 import fm from 'front-matter'
 
@@ -34,6 +35,37 @@ const findExistingIssueByTitle = async (title) => {
   return result.value.data.find(issue => issue.title === title)
 }
 
+const verifyTests = (testPath) => {
+  if (!testPath) return { ok: false, status: 'OPEN', reason: 'Missing test_ref' }
+  if (!fs.existsSync(testPath)) return { ok: false, status: 'OPEN', reason: `test_ref not found: ${testPath}` }
+
+  console.log(`[TEST] Verifying ${testPath}...`)
+  const result = spawnSync('node', [
+    '--experimental-strip-types'
+    , '--test'
+    , testPath
+  ]
+    , { encoding: 'utf8' }
+  )
+
+  const output = result.stdout + result.stderr
+  const success = result.status === 0
+
+  if (success) {
+    return { ok: true, status: 'CLOSED' }
+  }
+
+  // TDD Logic: If Solution (Test A) fails but Proof (Test B) passes -> IN_PROGRESS
+  const proofPassed = output.includes('Test B (The Proof) PASSED')
+  const solutionFailed = output.includes('Test A (The Solution) FAILED') || output.includes('AssertionError')
+
+  if (proofPassed && solutionFailed) {
+    return { ok: false, status: 'IN_PROGRESS', reason: 'Proof passes but solution fails' }
+  }
+
+  return { ok: false, status: 'OPEN', reason: 'Tests failing' }
+}
+
 const findFiles = (dir) => {
   if (!fs.existsSync(dir)) return []
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap(file => {
@@ -45,13 +77,36 @@ const findFiles = (dir) => {
 const sync = async () => {
   const filePaths = findFiles(ISSUES_DIR)
 
-  for (const filePath of filePaths) {
+  for (let filePath of filePaths) {
+    if (!fs.existsSync(filePath)) continue
+
     const file = path.relative(ISSUES_DIR, filePath)
     const content = fs.readFileSync(filePath, 'utf8')
     const { attributes, body } = fm(content)
     const title = attributes.title || body.split('\n')[0].replace(/^#\s(Issue\s\d+:\s)?/, '').trim()
-    const isClosed = attributes.status === 'CLOSED' || filePath.includes('/CLOSED/')
-    const status = isClosed ? 'CLOSED' : 'OPEN'
+    const isClosedRequest = attributes.status === 'CLOSED' || filePath.includes('/CLOSED/')
+    let status = isClosedRequest ? 'CLOSED' : (attributes.status || 'OPEN')
+
+    if (status === 'CLOSED') {
+      const verification = verifyTests(attributes.test_ref)
+      if (!verification.ok) {
+        console.warn(`[WARN] Issue ${file} cannot be CLOSED: ${verification.reason}. Moving to ${verification.status}.`)
+        status = verification.status
+      }
+    }
+
+    // Determine correct directory
+    const targetDir = status === 'CLOSED' ? 'CLOSED' : 'OPEN'
+    const targetPath = path.join(ISSUES_DIR, targetDir, path.basename(filePath))
+
+    if (filePath !== targetPath) {
+      console.log(`[MOVE] Moving ${file} to ${targetDir}/`)
+      if (!fs.existsSync(path.dirname(targetPath))) {
+        fs.mkdirSync(path.dirname(targetPath), { recursive: true })
+      }
+      fs.renameSync(filePath, targetPath)
+      filePath = targetPath
+    }
 
     let gh_number = attributes.gh_number
 
