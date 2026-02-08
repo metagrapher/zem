@@ -1,25 +1,26 @@
 function verificationTest(
-    foo
+  foo
   , baz
-  , nested =
-    { a: 1
+  , nested = { 
+    a: 1
     , b: 2
     , c: 3
     }
 ) {
   const thing =
-  { 'some prop' : 1
+  { 
+    'some prop' : 1
   , 'another' : true
-  , 'object_array' : [
-    { "indentation" : 2
-    , "commas" : "at start"
-    , "closing_brace" : "new line"
-    }
-  ]
-  , 'object_array_2' :
-    [ { "indentation" : 2
+  , 'object_array' : [ 
+      { "indentation" : 2
       , "commas" : "at start"
       , "closing_brace" : "new line"
+      }
+    ]
+  , 'object_array_2' :
+    [ { "indentation" : 2
+        , "commas" : "at start"
+        , "closing_brace" : "new line"
       }
     , { "indentation" : 2
       , "commas" : "at start"
@@ -28,14 +29,14 @@ function verificationTest(
     ]
   , 'yetmore' : false
   }
-  if (baz && foo) {
+  if ( baz && foo) {
     const data =
     { foo: 'bar'
     , baz: 'qux'
     , nested:
       { a: 1
-      , b: 2
-      , c: 3
+        , b: 2
+        , c: 3
       }
     }
     console.log(data)
@@ -51,12 +52,13 @@ function reverify( text, depth ) {
     return verificationTest(false, true, { a: 1, b: 2, c: 3 })
 }
 
-verificationTest( false
+verificationTest(false
                 , true
                 , { a: 1, b: 2, c: 3 }
                 )
 
-verificationTest( false
+verificationTest( 
+                false
                 , true
                 , { a: 1
                   , b: 2
