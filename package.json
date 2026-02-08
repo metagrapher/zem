@@ -7,8 +7,12 @@
     "module": "./dist/index.js",
     "types": "./dist/index.d.ts",
     "bin": {
-        "zem": "./bin/zem.js"
+        "zem": "./dist/cli.js"
     },
+    "files": [
+        "dist",
+        "scripts"
+    ],
     "exports": {
         ".": {
             "types": "./dist/index.d.ts",
@@ -20,7 +24,7 @@
         }
     },
     "scripts": {
-        "build": "tsc --project tsconfig.build.json && esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js && esbuild src/eslint/index.ts --bundle --format=esm --outfile=dist/eslint/index.js --platform=node",
+        "build": "tsc --project tsconfig.build.json && esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js && esbuild src/eslint/index.ts --bundle --format=esm --outfile=dist/eslint/index.js --platform=node && esbuild src/cli.ts --bundle --format=esm --outfile=dist/cli.js --platform=node --packages=external",
         "test": "node --experimental-strip-types --test src/**/*.test.ts tests/**/*.test.mjs",
         "test:coverage": "mkdir -p coverage-data && TMPDIR=$PWD/coverage-data node --experimental-strip-types --experimental-test-coverage --test src/**/*.test.ts tests/**/*.test.mjs",
         "typecheck": "tsc --noEmit",
@@ -39,13 +43,16 @@
     ],
     "author": "Metagrapher",
     "license": "MIT",
-    "devDependencies": {
+    "dependencies": {
         "@octokit/rest": "^19.0.13",
+        "front-matter": "^4.0.2"
+    },
+    "devDependencies": {
         "@types/eslint": "^9.6.1",
         "@types/node": "^25.2.0",
         "esbuild": "^0.27.2",
         "eslint": "^9.20.1",
-        "front-matter": "^4.0.2",
+        "@types/front-matter": "^4.0.2",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.54.0"
     }

@@ -28,11 +28,15 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Build
+        run: npm run build
+
+
       - name: Sync Issues
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
-        run: node scripts/sync-issues.mjs
+        run: node dist/cli.js sync-issues
 
       - name: Commit Changes
         env:
