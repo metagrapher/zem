@@ -56,13 +56,15 @@ const verifyTests = (testPath) => {
   }
 
   // TDD Logic: If Solution (Test A) fails but Proof (Test B) passes -> IN_PROGRESS
-  const proofPassed = output.includes('Test B (The Proof) PASSED')
-  const solutionFailed = output.includes('Test A (The Solution) FAILED') || output.includes('AssertionError')
+  const proofPassed = /Test B \(The Proof\).*PASSED|✔ Test B \(The Proof\)/i.test(output)
+  const solutionFailed = /Test A \(The Solution\).*FAILED|✖ Test A \(The Solution\)|AssertionError|ERR_ASSERTION/i.test(output)
 
   if (proofPassed && solutionFailed) {
+    console.log(`[TEST] TDD State detected for ${testPath}`)
     return { ok: false, status: 'IN_PROGRESS', reason: 'Proof passes but solution fails' }
   }
 
+  console.log(`[TEST] Generic failure for ${testPath} (Proof: ${proofPassed}, Solution Failed: ${solutionFailed})`)
   return { ok: false, status: 'OPEN', reason: 'Tests failing' }
 }
 
@@ -72,6 +74,23 @@ const findFiles = (dir) => {
     const res = path.join(dir, file.name)
     return file.isDirectory() ? findFiles(res) : (file.name.endsWith('.md') ? [res] : [])
   })
+}
+
+const formatGitHubBody = (attributes, body) => {
+  const metadata = Object.entries(attributes)
+    .filter(([key]) => !['title', 'status', 'gh_number', 'labels'].includes(key))
+    .map(([key, value]) => {
+      let displayValue = value
+      if (key === 'verification') {
+        displayValue = value === 'PASS' ? '✅ PASS' : (value === 'IN_PROGRESS' ? '🧪 IN_PROGRESS (Proof Passes)' : '❌ FAIL')
+      }
+      return `- **${key}**: ${displayValue}`
+    })
+    .join('\n')
+
+  if (!metadata) return body
+
+  return `### Metadata\n${metadata}\n\n---\n\n${body}`
 }
 
 const sync = async () => {
@@ -84,13 +103,14 @@ const sync = async () => {
     const content = fs.readFileSync(filePath, 'utf8')
     const { attributes, body } = fm(content)
     const title = attributes.title || body.split('\n')[0].replace(/^#\s(Issue\s\d+:\s)?/, '').trim()
-    const isClosedRequest = attributes.status === 'CLOSED' || filePath.includes('/CLOSED/')
-    const isInProgressRequest = attributes.status === 'IN_PROGRESS' || filePath.includes('/IN_PROGRESS/')
-    let status = isClosedRequest ? 'CLOSED' : (isInProgressRequest ? 'IN_PROGRESS' : (attributes.status || 'OPEN'))
+    const dirStatus = filePath.includes('/CLOSED/') ? 'CLOSED' : (filePath.includes('/IN_PROGRESS/') ? 'IN_PROGRESS' : 'OPEN')
+    let status = attributes.status || dirStatus
 
-    // Always verify if test_ref is present
+    // Capture verification status
     if (attributes.test_ref) {
       const verification = verifyTests(attributes.test_ref)
+      attributes.verification = verification.ok ? 'PASS' : (verification.status === 'IN_PROGRESS' ? 'IN_PROGRESS' : 'FAIL')
+      
       if (status === 'CLOSED' && !verification.ok) {
         console.warn(`[WARN] Issue ${file} cannot be CLOSED: ${verification.reason}. Moving to ${verification.status}.`)
         status = verification.status
@@ -136,11 +156,11 @@ const sync = async () => {
         if (index > -1) labels.splice(index, 1)
       }
 
-      const result = await atomicAsync(() => octokit.issues.create({
+      const result = await atomicAsync(() => octokit.rest.issues.create({
         owner,
         repo,
         title: title,
-        body: body,
+        body: formatGitHubBody(attributes, body),
         labels: labels
       }));
       if (result.ok) {
@@ -154,32 +174,60 @@ const sync = async () => {
       console.log(`Updating issue #${gh_number}...`);
       
       // Fetch existing issue to preserve other labels
-      const existingIssue = await atomicAsync(() => octokit.issues.get({
+      const existingIssue = await atomicAsync(() => octokit.rest.issues.get({
         owner,
         repo,
-        issue_number: gh_number
-      }));
+        issue_number: gh_number,
+      }))
 
       let labels = []
       if (existingIssue.ok) {
-        labels = existingIssue.value.data.labels.map(l => typeof l === 'string' ? l : l.name)
+        labels = existingIssue.value.data.labels.map(l => (typeof l === 'string' ? l : l.name))
       } else {
+        console.warn(`[WARN] Could not fetch remote labels for #${gh_number}, falling back to local.`)
         labels = Array.isArray(attributes.labels) ? [...attributes.labels] : []
       }
 
+      // 1. Manage "in progress" label (Strictly based on IN_PROGRESS status)
       if (status === 'IN_PROGRESS') {
-        if (!labels.includes('in progress')) labels.push('in progress')
+        if (!labels.includes('in progress')) {
+          console.log(`[LABEL] Adding 'in progress' label to #${gh_number}`)
+          labels.push('in progress')
+        }
       } else {
         const index = labels.indexOf('in progress')
-        if (index > -1) labels.splice(index, 1)
+        if (index > -1) {
+          console.log(`[LABEL] Removing 'in progress' label from #${gh_number}`)
+          labels.splice(index, 1)
+        }
       }
 
-      const result = await atomicAsync(() => octokit.issues.update({
+      // 2. Manage "regression" label
+      if (existingIssue.ok) {
+        const remoteState = existingIssue.value.data.state
+        if (remoteState === 'closed' && (status === 'OPEN' || status === 'IN_PROGRESS')) {
+          console.log(`[LABEL] Regression detected on #${gh_number}. Adding 'regression' label.`)
+          if (!labels.includes('regression')) labels.push('regression')
+        } else if (status === 'CLOSED') {
+          const index = labels.indexOf('regression')
+          if (index > -1) {
+            console.log(`[LABEL] Fixed! Removing 'regression' label from #${gh_number}`)
+            labels.splice(index, 1)
+          }
+        }
+      }
+
+      // Cleanup: deduplicate
+      labels = [...new Set(labels)]
+
+      console.log(`[SYNC] Updating GitHub #${gh_number} | status: ${status} | labels: [${labels.join(', ')}]`);
+
+      const result = await atomicAsync(() => octokit.rest.issues.update({
         owner,
         repo,
         issue_number: gh_number,
         title: title,
-        body: body,
+        body: formatGitHubBody(attributes, body),
         labels: labels,
         state: (status === 'CLOSED' ? 'closed' : 'open')
       }));
@@ -189,18 +237,33 @@ const sync = async () => {
       }
     }
 
-    const newContent =
-      (`---\n`
-        + `title: ${title}\n`
-        + `status: ${status}\n`
-        + `gh_number: ${gh_number}\n`
-        + `---\n`
-        + `${body}`
-      )
+    const updatedAttributes = {
+      ...attributes,
+      title,
+      status,
+      gh_number
+    }
+
+    const frontMatter = Object.entries(updatedAttributes)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('\n')
+
+    const newContent = `---\n${frontMatter}\n---\n${body}`
 
     if (newContent.trim() !== content.trim()) {
       console.log(`[SYNC] Updating local file: ${file}`)
       fs.writeFileSync(filePath, newContent)
+    }
+
+    // Rename file if prefix doesn't match gh_number
+    const currentName = path.basename(filePath)
+    const ghPrefix = String(gh_number).padStart(3, '0')
+    if (!currentName.startsWith(ghPrefix)) {
+      const newName = `${ghPrefix}-${currentName.replace(/^\d+-/, '')}`
+      const finalPath = path.join(path.dirname(filePath), newName)
+      console.log(`[RENAME] Renaming local issue to match GitHub #${gh_number}: ${newName}`)
+      fs.renameSync(filePath, finalPath)
+      filePath = finalPath
     }
   }
 }

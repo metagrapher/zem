@@ -20,6 +20,7 @@
         "eslint.config.js",
         "docs",
         "bin",
-        "package.json"
+        "package.json",
+        "tests"
     ]
 }
