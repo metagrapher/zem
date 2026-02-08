@@ -62,14 +62,14 @@ ZEM is designed for composition. While the base functions (`map`, `chain`) are d
 import { Ok, Err, chain, map, pipe } from '@metagrapher/zem'
 
 // Create simple data-last helpers for your project
-const chainL = (fn) => (res) => chain(res, fn)
-const mapL = (fn) => (res) => map(res, fn)
+const chainL = <T, E, U>(fn: (v: T) => Result<U, E>) => (res: Result<T, E>) => chain(res, fn)
+const mapL = <T, E, U>(fn: (v: T) => U) => (res: Result<T, E>) => map(res, fn)
 
-// Now you can build clean pipelines
+// Now you can build clean pipelines with type safety
 const calculate = (input: number) => pipe(
   Ok(input),
-  chainL(n => safeDivision(n, 2)), 
-  mapL(n => n + 5)
+  chainL((n) => safeDivision(n, 2)), 
+  mapL((n) => n + 5)
 ) 
 ```
 
