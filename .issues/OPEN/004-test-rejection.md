@@ -1,7 +1,6 @@
 ---
-title: Test Rejection Verification
+title: Ghost Issue 004
 status: OPEN
-gh_number: 7
 ---
-# Issue 004: Test Rejection Verification
-This issue is in CLOSED but its tests should force it to IN_PROGRESS.
+# Issue 004: Deprecated Rejection Test
+This file was a duplicate test for Issue #7. It has been stripped of its gh_number and title to resolve deduplication conflicts.
