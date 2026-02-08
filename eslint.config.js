@@ -8,25 +8,20 @@ export default tseslint.config(
         ignores: ['dist/**', 'node_modules/**', 'coverage/**', '.eslint-rules/**', 'test-project/**'],
     },
     {
-        files: ['**/*.ts', '**/*.js'],
+        files: ['**/*.{ts,js,mjs,cjs}'],
         languageOptions: {
             parserOptions: {
                 project: './tsconfig.json',
             },
-        },
-        rules: {
-            '@typescript-eslint/no-explicit-any': 'off',
-            '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-            '@typescript-eslint/no-unsafe-function-type': 'off', // Allow Function type for composition helpers
-        },
-    },
-    {
-        files: ['scripts/**/*.js', 'scripts/**/*.ts', 'scripts/**/*.mjs', 'eslint.config.js'],
-        languageOptions: {
             globals: {
                 process: 'readonly',
                 console: 'readonly',
             }
-        }
-    }
+        },
+        rules: {
+            '@typescript-eslint/no-explicit-any': 'off',
+            '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+            '@typescript-eslint/no-unsafe-function-type': 'off',
+        },
+    },
 );
