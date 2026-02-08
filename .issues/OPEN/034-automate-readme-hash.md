@@ -3,7 +3,6 @@ title: "Automate README Install Hash Updates"
 type: task
 status: open
 priority: high
-test_ref: scripts/update-readme-hash.test.ts
 verification: FAIL
 gh_number: 34
 ---

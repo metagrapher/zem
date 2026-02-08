@@ -47,7 +47,7 @@ export async function init() {
         const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'))
         pkg.scripts = {
             ...pkg.scripts,
-            "structural-check": "node --loader ts-node/esm ./node_modules/@metagrapher/zem/scripts/structural-audit.ts",
+            "structural-check": "zem audit",
             "typecheck": "tsc --noEmit",
             "lint": "eslint .",
             "test:coverage": `vitest run --coverage${isStrict ? '' : ' --threshold 80'}`,

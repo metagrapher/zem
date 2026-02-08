@@ -1,7 +1,6 @@
 ---
 title: "Fix Sync Issues Serialization and Validation Errors"
 status: OPEN
-test_ref: tests/issue-032.test.mjs
 verification: FAIL
 gh_number: 42
 ---
