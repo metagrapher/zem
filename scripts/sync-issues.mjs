@@ -56,8 +56,8 @@ const verifyTests = (testPath) => {
   }
 
   // TDD Logic: If Solution (Test A) fails but Proof (Test B) passes -> IN_PROGRESS
-  const proofPassed = output.includes('Test B (The Proof) PASSED') || output.includes('✔ Test B (The Proof)')
-  const solutionFailed = output.includes('Test A (The Solution) FAILED') || output.includes('✖ Test A (The Solution)') || output.includes('AssertionError')
+  const proofPassed = /Test B \(The Proof\).*PASSED|✔ Test B \(The Proof\)/i.test(output)
+  const solutionFailed = /Test A \(The Solution\).*FAILED|✖ Test A \(The Solution\)|AssertionError|ERR_ASSERTION/i.test(output)
 
   if (proofPassed && solutionFailed) {
     console.log(`[TEST] TDD State detected for ${testPath}`)
