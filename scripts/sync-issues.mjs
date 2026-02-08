@@ -189,14 +189,18 @@ const sync = async () => {
       }
     }
 
-    const newContent =
-      (`---\n`
-        + `title: ${title}\n`
-        + `status: ${status}\n`
-        + `gh_number: ${gh_number}\n`
-        + `---\n`
-        + `${body}`
-      )
+    const updatedAttributes = {
+      ...attributes,
+      title,
+      status,
+      gh_number
+    }
+
+    const frontMatter = Object.entries(updatedAttributes)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join('\n')
+
+    const newContent = `---\n${frontMatter}\n---\n${body}`
 
     if (newContent.trim() !== content.trim()) {
       console.log(`[SYNC] Updating local file: ${file}`)
