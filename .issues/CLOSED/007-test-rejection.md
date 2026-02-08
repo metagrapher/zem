@@ -1,6 +1,6 @@
 ---
 title: Test Rejection Verification
-status: CLOSED
+status: IN_PROGRESS
 gh_number: 7
 test_ref: src/logic/progress.test.ts
 ---
