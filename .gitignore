@@ -43,3 +43,4 @@ coverage/
 
 # Agent specific
 .gemini/
+antigravity_ai*

@@ -1,3 +1,8 @@
+---
+title: Port Advanced Comma Logic
+status: CLOSED
+gh_number: 4
+---
 # Issue 001: Port Advanced Comma Logic
 
 ## Description

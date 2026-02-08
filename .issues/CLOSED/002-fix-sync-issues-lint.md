@@ -1,3 +1,8 @@
+---
+title: Fix Linting for sync-issues.mjs
+status: CLOSED
+gh_number: 5
+---
 # Issue 002: Fix Linting for sync-issues.mjs
 
 ## Description
