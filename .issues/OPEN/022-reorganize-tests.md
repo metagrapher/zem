@@ -1,3 +1,8 @@
+---
+title: title: Reorganize Verification and Integration Tests
+status: OPEN
+gh_number: 22
+---
 title: Reorganize Verification and Integration Tests
 status: OPEN
 ---
