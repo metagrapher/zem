@@ -67,6 +67,31 @@ You can run the full audit at any time:
 npm run zem
 ```
 
+## CLI Usage
+
+ZEM includes a built-in CLI for project scaffolding and "Infrastructure as Code" issue management.
+
+### Project Initialization
+
+Scaffold the ZEM verification stack and git hooks in a new or existing project:
+
+```bash
+npx zem init
+```
+
+### Issue Synchronization
+
+ZEM allows you to manage GitHub Issues as code. Create markdown files in `.issues/OPEN/` and sync them to GitHub:
+
+```bash
+npx zem sync-issues
+```
+
+This command:
+- **Creates** new issues from files in `.issues/OPEN/` that don't satisfy the naming convention.
+- **Updates** existing issues if the markdown content has changed.
+- **Closes** issues if the file is moved to `.issues/CLOSED/`.
+
 ## Automatic Test Scaffolding
 
 To maintain 100% structural integrity without manual boilerplate, use the automatic test scaffold watcher:
