@@ -81,19 +81,25 @@ This converts potential **Runtime Crashes** (app failure) into **Compile-Time Ch
 
 ### Why No Exceptions?
 
-ZEM prohibits `throw` and `try/catch`, mirroring the **Joint Strike Fighter Air Vehicle C++ Coding Standards** (JSF AV) for safety-critical systems. We adapt these principles for TypeScript:
+ZEM prohibits `throw` and `try/catch`, mirroring the **Joint Strike Fighter Air Vehicle C++ Coding Standards** (JSF AV) for safety-critical systems. We adapt these principles for modern TypeScript:
 
 1.  **Reliability (No Invisible Control Flow)**:
     Exceptions define a hidden control flow path (a dynamic `GOTO`) that is invisible in the source code. In ZEM, control flow is always linear, explicit, and visible.
 
-2.  **Complexity & Maintainability**:
-    When a function can throw, *every* line of code is a potential exit point. This makes it impossible to reason about the state of the application. By treating errors as data (`Result`), we keep the logic simple and local.
+2.  **Complexity & Finite States**:
+    When a function can throw, *every* line of code is a potential exit point. This explodes the complexity of the system.
+    
+    By returning `Result`, we reduce the state space to a manageable, finite set. This allows your application to behave like a reliable **Finite State Machine**. Simpler, linear code with fewer branches allows the CPU to execute instructions significantly faster.
 
-3.  **Type Safety (The "Any" Trap)**:
-    TypeScript cannot type-check exceptions. A `catch (e)` block always receives `unknown` or `any`, destroying type safety. `Result<Success, Failure>` preserves type information, forcing you to handle specific error cases.
+3.  **Performance (Edge & Cloud)**:
+    In serverless environments (Cloudflare Workers, AWS Lambda), "Wall Time" is money. Unhandled exceptions or deep stack traces cause expensive deoptimizations. 
+    
+    Explicit error handling ensures predictable performance profiles. Deterministic code allows JavaScript engines (V8) to optimize "hot paths" more effectively than code with unpredictable exception jumps.
 
-4.  **Performance Predictability**:
-    While modern engines optimize `try/catch`, unhandled exceptions (especially in async flows) can cause expensive stack trace generation and unpredictable deoptimizations. Explicit returns are always faster and more predictable than stack unwinding.
+4.  **Type Safety (The "Any" Trap)**:
+    **This is the single biggest advantage.** TypeScript cannot type-check exceptions. A `catch (e)` block always receives `unknown` or `any`, forcing you to guess what went wrong. 
+    
+    `Result<Success, Failure>` transforms error handling from a runtime guessing game into a **compile-time contract**. You know *exactly* which errors a function can return, and the compiler forces you to handle them. This safety guarantee is impossible with standard `try/catch`.
 
 #### Composition & Pipelining
 
