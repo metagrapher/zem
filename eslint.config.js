@@ -21,7 +21,7 @@ export default tseslint.config(
         },
     },
     {
-        files: ['scripts/**/*.js', 'scripts/**/*.ts', 'eslint.config.js'],
+        files: ['scripts/**/*.js', 'scripts/**/*.ts', 'scripts/**/*.mjs', 'eslint.config.js'],
         languageOptions: {
             globals: {
                 process: 'readonly',
