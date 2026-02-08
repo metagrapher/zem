@@ -79,6 +79,22 @@ const safeOutput = map(result, (n) => n + 5)
 
 This converts potential **Runtime Crashes** (app failure) into **Compile-Time Checks** (build failure).
 
+### Why No Exceptions?
+
+ZEM prohibits `throw` and `try/catch`, mirroring the **Joint Strike Fighter Air Vehicle C++ Coding Standards** (JSF AV) for safety-critical systems. We adapt these principles for TypeScript:
+
+1.  **Reliability (No Invisible Control Flow)**:
+    Exceptions define a hidden control flow path (a dynamic `GOTO`) that is invisible in the source code. In ZEM, control flow is always linear, explicit, and visible.
+
+2.  **Complexity & Maintainability**:
+    When a function can throw, *every* line of code is a potential exit point. This makes it impossible to reason about the state of the application. By treating errors as data (`Result`), we keep the logic simple and local.
+
+3.  **Type Safety (The "Any" Trap)**:
+    TypeScript cannot type-check exceptions. A `catch (e)` block always receives `unknown` or `any`, destroying type safety. `Result<Success, Failure>` preserves type information, forcing you to handle specific error cases.
+
+4.  **Performance Predictability**:
+    While modern engines optimize `try/catch`, unhandled exceptions (especially in async flows) can cause expensive stack trace generation and unpredictable deoptimizations. Explicit returns are always faster and more predictable than stack unwinding.
+
 #### Composition & Pipelining
 
 ZEM is designed for composition. While the base functions (`map`, `chain`) are data-first, you can easily create data-last wrappers or simple composition helpers to build pipelines.
