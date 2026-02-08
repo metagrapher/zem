@@ -120,7 +120,7 @@ export const sync = async (): Promise<void> => {
         const file = path.relative(ISSUES_DIR, filePath)
         const content = fs.readFileSync(filePath, 'utf8')
         const { attributes, body } = fm<IssueAttributes>(content)
-        const title = attributes.title || body.split('\n')[0].replace(/^#\s(Issue\s\d+:\s)?/, '').trim()
+        const title = (attributes.title || body.split('\n')[0].replace(/^#\s(Issue\s\d+:\s)?/i, '').trim()).replace(/^title:\s/i, '').trim()
 
         const dirStatus = filePath.includes('/CLOSED/') ? 'CLOSED' : (filePath.includes('/IN_PROGRESS/') ? 'IN_PROGRESS' : 'OPEN')
         let status = attributes.status || dirStatus
