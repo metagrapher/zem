@@ -97,7 +97,7 @@ ZEM prohibits `throw` and `try/catch`, mirroring the **Joint Strike Fighter Air 
     Explicit error handling ensures predictable performance profiles. Deterministic code allows JavaScript engines (V8) to optimize "hot paths" more effectively than code with unpredictable exception jumps.
 
 4.  **Type Safety (The "Any" Trap)**:
-    **This is the single biggest advantage.** TypeScript cannot type-check exceptions. A `catch (e)` block always receives `unknown` or `any`, forcing you to guess what went wrong. 
+    **This is the single biggest advantage.** TypeScript cannot type-check exceptions. A `catch (e)` block always receives `unknown` or `any`, forcing you to guess what went wrong. And if you're using implicit conversion, then you won't even know that the function can throw.
     
     `Result<Success, Failure>` transforms error handling from a runtime guessing game into a **compile-time contract**. You know *exactly* which errors a function can return, and the compiler forces you to handle them. This safety guarantee is impossible with standard `try/catch`.
 
@@ -189,9 +189,13 @@ npx zem sync-issues
 
 ## Installation
 
+To ensure stability and auditability, we strictly recommend installing ZEM via a specific commit hash:
+
 ```bash
-npm install @metagrapher/zem
+npm install github:metagrapher/zem#a2b9d1b8b4dde6b8b73af3c55073e8b6c1fc6675
 ```
+
+We do not publish to the public npm registry to prevent supply chain attacks and ensure all code is immutable.
 
 ## Developing with ZEM
 
