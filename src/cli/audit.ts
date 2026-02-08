@@ -94,14 +94,19 @@ export async function audit() {
 
             // Mechanical Verification
             const isClosed = relPath.includes('CLOSED')
+            const isInProgress = relPath.includes('IN_PROGRESS')
+            const isOpen = relPath.includes('OPEN')
+            
             const testMatch = content.match(/test_ref:\s*(.+)/)
             const verMatch = content.match(/verification:\s*(.+)/)
+            const regMatch = content.match(/regression:\s*(.+)/)
             
             const testRef = testMatch ? testMatch[1].trim() : null
             const verStatus = verMatch ? verMatch[1].trim() : null
+            const isRegression = regMatch ? regMatch[1].trim().toLowerCase() === 'true' : false
 
-            if (isClosed && !testRef) {
-                console.error('\x1b[31m%s\x1b[0m', `NO SIGNAL: Closed issue ${relPath} must have a test_ref.`)
+            if ((isClosed || isInProgress || isRegression) && !testRef) {
+                console.error('\x1b[31m%s\x1b[0m', `NO SIGNAL: Issue ${relPath} (State: ${isClosed ? 'CLOSED' : isInProgress ? 'IN_PROGRESS' : 'REGRESSION'}) must have a test_ref.`)
                 process.exit(1)
             }
 
@@ -112,17 +117,45 @@ export async function audit() {
                     process.exit(1)
                 }
 
+                // Execute the witness
+                const result = spawnSync('node', ['--experimental-strip-types', '--test', absoluteTestPath], { 
+                    encoding: 'utf8',
+                    env: { ...process.env, TMPDIR: join(process.cwd(), 'coverage-data') }
+                })
+                const output = result.stdout + result.stderr
+                const success = result.status === 0
+
                 if (isClosed) {
-                    const result = spawnSync('node', ['--experimental-strip-types', '--test', absoluteTestPath], { encoding: 'utf8' })
-                    if (result.status !== 0) {
-                        console.error('\x1b[31m%s\x1b[0m', `NO SIGNAL: Issue ${relPath} is CLOSED but its test_ref fails!`)
-                        console.error(result.stderr || result.stdout)
+                    if (!success) {
+                        console.error('\x1b[31m%s\x1b[0m', `NO SIGNAL: Regression detected! CLOSED issue ${relPath} fails its tests.`)
+                        console.error(output)
                         process.exit(1)
                     }
                     if (verStatus !== 'PASS') {
                         console.error('\x1b[31m%s\x1b[0m', `NO SIGNAL: Issue ${relPath} is CLOSED but verification is not 'PASS'.`)
                         process.exit(1)
                     }
+                } else if (isInProgress) {
+                    const proofPassed = /Test B \(The Proof\).*PASSED|✔ Test B \(The Proof\)/i.test(output) || output.includes('✔ Test B')
+                    const solutionFailed = /Test A \(The Solution\).*FAILED|✖ Test A \(The Solution\)|AssertionError|ERR_ASSERTION/i.test(output)
+                    
+                    if (!proofPassed) {
+                        console.error('\x1b[31m%s\x1b[0m', `NO SIGNAL: IN_PROGRESS issue ${relPath} failed reproduction. 'Test B (The Proof)' must pass.`)
+                        process.exit(1)
+                    }
+                    if (!solutionFailed) {
+                        console.error('\x1b[31m%s\x1b[0m', `NO SIGNAL: IN_PROGRESS issue ${relPath} has no failing solution. Fix it and CLOSE it.`)
+                        process.exit(1)
+                    }
+                } else if (isOpen && isRegression) {
+                    // Witnessing the Regression: It MUST fail to be a valid regression
+                    if (success) {
+                        console.error('\x1b[31m%s\x1b[0m', `NO SIGNAL: Categorization Error in ${relPath}`)
+                        console.error(` - Issue is marked as a REGRESSION, but the tests are currently PASSING.`)
+                        console.error(` - To fix: If the bug is gone, move this issue to CLOSED. If it's not gone, update the test_ref to a truly failing reproduction.`)
+                        process.exit(1)
+                    }
+                    console.log(`\x1b[33m%s\x1b[0m`, `WITNESS: Issue ${relPath} is a confirmed regression (Failing as expected).`)
                 }
             }
         })

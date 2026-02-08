@@ -1,6 +1,6 @@
 ---
 title: "Automate Test Verification via GitHub Actions"
-status: IN_PROGRESS
+status: CLOSED
 priority: HIGH
 gh_number: 40
 test_ref: tests/issue-040.test.mjs
