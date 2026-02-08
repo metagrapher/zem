@@ -74,6 +74,17 @@ const findFiles = (dir) => {
   })
 }
 
+const formatGitHubBody = (attributes, body) => {
+  const metadata = Object.entries(attributes)
+    .filter(([key]) => !['title', 'status', 'gh_number', 'labels'].includes(key))
+    .map(([key, value]) => `- **${key}**: ${value}`)
+    .join('\n')
+
+  if (!metadata) return body
+
+  return `### Metadata\n${metadata}\n\n---\n\n${body}`
+}
+
 const sync = async () => {
   const filePaths = findFiles(ISSUES_DIR)
 
@@ -136,11 +147,11 @@ const sync = async () => {
         if (index > -1) labels.splice(index, 1)
       }
 
-      const result = await atomicAsync(() => octokit.issues.create({
+      const result = await atomicAsync(() => octokit.rest.issues.create({
         owner,
         repo,
         title: title,
-        body: body,
+        body: formatGitHubBody(attributes, body),
         labels: labels
       }));
       if (result.ok) {
@@ -182,12 +193,12 @@ const sync = async () => {
 
       console.log(`[SYNC] Updating GitHub #${gh_number} | status: ${status} | labels: [${labels.join(', ')}]`);
 
-      const result = await atomicAsync(() => octokit.issues.update({
+      const result = await atomicAsync(() => octokit.rest.issues.update({
         owner,
         repo,
         issue_number: gh_number,
         title: title,
-        body: body,
+        body: formatGitHubBody(attributes, body),
         labels: labels,
         state: (status === 'CLOSED' ? 'closed' : 'open')
       }));
