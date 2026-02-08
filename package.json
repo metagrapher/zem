@@ -44,7 +44,7 @@
     "author": "Metagrapher",
     "license": "MIT",
     "dependencies": {
-        "@octokit/rest": "^19.0.13",
+        "@octokit/rest": "^22.0.1",
         "front-matter": "^4.0.2"
     },
     "devDependencies": {
