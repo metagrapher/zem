@@ -65,6 +65,17 @@ If you try to use this result directly—like checking `safeDivision(1,0) + 5`�
 If you ignore it, type checking stops you (Compile-Time Error).
 If you handle it (using `map`, `chain`, or checking `.success`), your code is forced to decide what to do in the error case explicitly.
 
+```typescript
+const result = safeDivision(10, 0)
+
+// ❌ UNSAFE: Using the result directly is blocked by TypeScript.
+// console.log(result + 5) // Error: Operator '+' cannot be applied to type 'Result'
+
+// ✅ SAFE: Use 'map' to transform the success case only.
+// If result is an error, 'map' skips the computation and passes the error along.
+const safeOutput = map(result, (n) => n + 5) 
+```
+
 This converts potential **Runtime Crashes** (app failure) into **Compile-Time Checks** (build failure).
 
 #### Composition & Pipelining
