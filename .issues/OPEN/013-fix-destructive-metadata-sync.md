@@ -1,8 +1,8 @@
 ---
 title: Fix destructive metadata synchronization in sync-issues.mjs
 status: OPEN
+gh_number: 13
 ---
-
 ## Description
 The current implementation of `sync-issues.mjs` overwrites the entire front-matter of local issue files with a hardcoded set of fields (`title`, `status`, `gh_number`). This causes any other metadata, such as `test_ref`, to be permanently deleted from the local file upon the first successful sync.
 

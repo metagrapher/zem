@@ -11,4 +11,4 @@ This is a proof-of-concept issue to verify that the sync script correctly reject
 - [x] Run failing TDD tests
 - [x] Verify automatic move to `IN_PROGRESS` folder
 - [x] Verify `in progress` label is applied to GitHub issue #7
-- [x] Confirm local filename matches GitHub issue number
+- [ ] Confirm local filename matches GitHub issue number
