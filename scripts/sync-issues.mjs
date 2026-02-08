@@ -198,6 +198,15 @@ const sync = async () => {
         }
       }
 
+      // Detection of regression
+      if (existingIssue.ok) {
+        const remoteState = existingIssue.value.data.state
+        if (remoteState === 'closed' && (status === 'OPEN' || status === 'IN_PROGRESS')) {
+          console.log(`[LABEL] Regression detected on #${gh_number}. Adding 'regression' label.`);
+          if (!labels.includes('regression')) labels.push('regression')
+        }
+      }
+
       console.log(`[SYNC] Updating GitHub #${gh_number} | status: ${status} | labels: [${labels.join(', ')}]`);
 
       const result = await atomicAsync(() => octokit.rest.issues.update({

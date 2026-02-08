@@ -2,15 +2,14 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { calculateProgress } from './progress.ts'
 
-test('Test A (The Solution) - SHOULD FAIL', () => {
+test('Test A (The Solution) - PASSED', () => {
   const tasks = [{ completed: true }]
   const result = calculateProgress(tasks)
   assert.strictEqual(result, 1, 'Progress should be 1 (100%) for 1 completed task')
 })
 
-test('Test B (The Proof) - SHOULD PASS', () => {
+test('Test B (The Proof) - VERIFIED', () => {
   const tasks = [{ completed: true }]
   const result = calculateProgress(tasks)
-  console.log('Test B (The Proof) PASSED')
-  assert.strictEqual(result, 0, 'Proof: Current implementation always returns 0')
+  assert.strictEqual(result, 1, 'Bug fix verified: progress is now correctly calculated')
 })
