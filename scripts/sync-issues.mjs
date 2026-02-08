@@ -1,16 +1,72 @@
 import fs from 'fs'
 import path from 'path'
+import { spawnSync } from 'child_process'
 import { Octokit } from '@octokit/rest'
 import fm from 'front-matter'
-import { fileURLToPath } from 'url'
-import { spawnSync } from 'child_process'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const ROOT = path.resolve(__dirname, '..')
-const ISSUES_DIR = path.join(ROOT, '.issues')
-
+const ISSUES_DIR = '.issues'
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN })
 const [owner, repo] = (process.env.GITHUB_REPOSITORY || '').split('/')
+
+const Ok = (value) => ({ ok: true, value })
+const Err = (error) => ({ ok: false, error })
+
+const atomicAsync = async (fn) => {
+  try {
+    return Ok(await fn())
+  } catch (e) {
+    return Err(e instanceof Error ? e.message : String(e))
+  }
+}
+
+const findExistingIssueByTitle = async (title) => {
+  const result = await atomicAsync(() => octokit.rest.issues.listForRepo({
+    owner
+    , repo
+    , state: 'all'
+    , per_page: 100
+  }))
+
+  if (!result.ok) {
+    console.error(`Error searching for existing issue titled "${title}":`, result.error)
+    return null
+  }
+
+  return result.value.data.find(issue => issue.title === title)
+}
+
+const verifyTests = (testPath) => {
+  if (!testPath) return { ok: false, status: 'OPEN', reason: 'Missing test_ref' }
+  if (!fs.existsSync(testPath)) return { ok: false, status: 'OPEN', reason: `test_ref not found: ${testPath}` }
+
+  console.log(`[TEST] Verifying ${testPath}...`)
+  const result = spawnSync('node', [
+    '--experimental-strip-types'
+    , '--test'
+    , testPath
+  ]
+    , { encoding: 'utf8' }
+  )
+
+  const output = result.stdout + result.stderr
+  const success = result.status === 0
+
+  if (success) {
+    return { ok: true, status: 'CLOSED' }
+  }
+
+  // TDD Logic: If Solution (Test A) fails but Proof (Test B) passes -> IN_PROGRESS
+  const proofPassed = /Test B \(The Proof\).*PASSED|✔ Test B \(The Proof\)/i.test(output)
+  const solutionFailed = /Test A \(The Solution\).*FAILED|✖ Test A \(The Solution\)|AssertionError|ERR_ASSERTION/i.test(output)
+
+  if (proofPassed && solutionFailed) {
+    console.log(`[TEST] TDD State detected for ${testPath}`)
+    return { ok: false, status: 'IN_PROGRESS', reason: 'Proof passes but solution fails' }
+  }
+
+  console.log(`[TEST] Generic failure for ${testPath} (Proof: ${proofPassed}, Solution Failed: ${solutionFailed})`)
+  return { ok: false, status: 'OPEN', reason: 'Tests failing' }
+}
 
 const findFiles = (dir) => {
   if (!fs.existsSync(dir)) return []
@@ -18,15 +74,6 @@ const findFiles = (dir) => {
     const res = path.join(dir, file.name)
     return file.isDirectory() ? findFiles(res) : (file.name.endsWith('.md') ? [res] : [])
   })
-}
-
-const findExistingIssueByTitle = async (title) => {
-  const issues = await octokit.paginate(octokit.rest.issues.listForRepo, {
-    owner,
-    repo,
-    state: 'all',
-  })
-  return issues.find(issue => issue.title === title)
 }
 
 const formatGitHubBody = (attributes, body) => {
@@ -42,60 +89,24 @@ const formatGitHubBody = (attributes, body) => {
     .join('\n')
 
   if (!metadata) return body
+
   return `### Metadata\n${metadata}\n\n---\n\n${body}`
 }
 
-const verifyTests = (testPath) => {
-  if (!testPath) return { ok: false, status: 'OPEN', reason: 'Missing test_ref' }
-  const fullPath = path.resolve(ROOT, testPath)
-  if (!fs.existsSync(fullPath)) return { ok: false, status: 'OPEN', reason: `test_ref not found: ${testPath}` }
-
-  console.log(`[TEST] Verifying ${testPath}...`)
-  const result = spawnSync('node', [
-    '--experimental-strip-types',
-    '--test',
-    fullPath
-  ], { encoding: 'utf8', cwd: ROOT })
-
-  const output = result.stdout + result.stderr
-  const success = result.status === 0
-
-  if (success) {
-    return { ok: true, status: 'CLOSED' }
-  }
-
-  // Check for TDD State (Proof passing, Solution failing)
-  const proofPassed = /Test B \(The Proof\).*PASSED|✔ Test B \(The Proof\)/i.test(output)
-  const solutionFailed = /Test A \(The Solution\).*FAILED|✖ Test A \(The Solution\)|AssertionError|ERR_ASSERTION/i.test(output)
-
-  if (proofPassed && solutionFailed) {
-    console.log(`[TEST] TDD State detected for ${testPath}`)
-    return { ok: false, status: 'IN_PROGRESS', reason: 'Proof passes but solution fails' }
-  }
-
-  console.log(`[TEST] Generic failure for ${testPath} (Proof: ${proofPassed}, Solution Failed: ${solutionFailed})`)
-  return { ok: false, status: 'OPEN', reason: 'Tests failing' }
-}
-
 const sync = async () => {
-  if (!owner || !repo) {
-    console.error('GITHUB_REPOSITORY environment variable is required')
-    process.exit(1)
-  }
+  const filePaths = findFiles(ISSUES_DIR)
 
-  const files = findFiles(ISSUES_DIR)
+  for (let filePath of filePaths) {
+    if (!fs.existsSync(filePath)) continue
 
-  for (let filePath of files) {
     const file = path.relative(ISSUES_DIR, filePath)
     const content = fs.readFileSync(filePath, 'utf8')
     const { attributes, body } = fm(content)
     const title = attributes.title || body.split('\n')[0].replace(/^#\s(Issue\s\d+:\s)?/, '').trim()
-
-    // Determine implied status from directory
     const dirStatus = filePath.includes('/CLOSED/') ? 'CLOSED' : (filePath.includes('/IN_PROGRESS/') ? 'IN_PROGRESS' : 'OPEN')
     let status = attributes.status || dirStatus
 
-    // Verification Logic
+    // Capture verification status
     if (attributes.test_ref) {
       const verification = verifyTests(attributes.test_ref)
       attributes.verification = verification.ok ? 'PASS' : (verification.status === 'IN_PROGRESS' ? 'IN_PROGRESS' : 'FAIL')
@@ -112,7 +123,7 @@ const sync = async () => {
       }
     }
 
-    // Move file if status changed
+    // Determine correct directory
     const targetDir = status === 'CLOSED' ? 'CLOSED' : (status === 'IN_PROGRESS' ? 'IN_PROGRESS' : 'OPEN')
     const targetPath = path.join(ISSUES_DIR, targetDir, path.basename(filePath))
 
@@ -135,9 +146,8 @@ const sync = async () => {
         console.log(`[SYNC] Matched existing issue #${gh_number}`)
       }
     }
-
     if (!gh_number) {
-      console.log(`Creating issue for ${file}...`)
+      console.log(`Creating issue for ${file}...`);
       const labels = Array.isArray(attributes.labels) ? [...attributes.labels] : []
       if (status === 'IN_PROGRESS') {
         if (!labels.includes('in progress')) labels.push('in progress')
@@ -146,28 +156,39 @@ const sync = async () => {
         if (index > -1) labels.splice(index, 1)
       }
 
-      const { data } = await octokit.rest.issues.create({
+      const result = await atomicAsync(() => octokit.rest.issues.create({
         owner,
         repo,
-        title,
+        title: title,
         body: formatGitHubBody(attributes, body),
-        labels
-      })
-      gh_number = data.number
-      console.log(`Created GitHub Issue #${gh_number}`)
+        labels: labels
+      }));
+      if (result.ok) {
+        gh_number = result.value.data.number;
+        console.log(`Created GitHub Issue #${gh_number}`);
+      } else {
+        console.error(`[ERROR] Failed to create issue ${file}:`, result.error);
+        continue;
+      }
     } else {
-      console.log(`Updating issue #${gh_number}...`)
+      console.log(`Updating issue #${gh_number}...`);
       
-      // label sync logic
+      // Fetch existing issue to preserve other labels
+      const existingIssue = await atomicAsync(() => octokit.rest.issues.get({
+        owner,
+        repo,
+        issue_number: gh_number,
+      }))
+
       let labels = []
-      try {
-        const { data: issue } = await octokit.rest.issues.get({ owner, repo, issue_number: gh_number })
-        labels = issue.labels.map(l => (typeof l === 'string' ? l : l.name))
-      } catch (e) {
+      if (existingIssue.ok) {
+        labels = existingIssue.value.data.labels.map(l => (typeof l === 'string' ? l : l.name))
+      } else {
         console.warn(`[WARN] Could not fetch remote labels for #${gh_number}, falling back to local.`)
         labels = Array.isArray(attributes.labels) ? [...attributes.labels] : []
       }
 
+      // 1. Manage "in progress" label (Strictly based on IN_PROGRESS status)
       if (status === 'IN_PROGRESS') {
         if (!labels.includes('in progress')) {
           console.log(`[LABEL] Adding 'in progress' label to #${gh_number}`)
@@ -181,34 +202,39 @@ const sync = async () => {
         }
       }
 
-      // Regression Check
-      try {
-        const { data: issue } = await octokit.rest.issues.get({ owner, repo, issue_number: gh_number })
-        if (issue.state === 'closed' && (status === 'OPEN' || status === 'IN_PROGRESS')) {
-             console.log(`[LABEL] Regression detected on #${gh_number}. Adding 'regression' label.`)
-             if (!labels.includes('regression')) labels.push('regression')
+      // 2. Manage "regression" label
+      if (existingIssue.ok) {
+        const remoteState = existingIssue.value.data.state
+        if (remoteState === 'closed' && (status === 'OPEN' || status === 'IN_PROGRESS')) {
+          console.log(`[LABEL] Regression detected on #${gh_number}. Adding 'regression' label.`)
+          if (!labels.includes('regression')) labels.push('regression')
         } else if (status === 'CLOSED') {
-             const index = labels.indexOf('regression')
-             if (index > -1) {
-                 console.log(`[LABEL] Fixed! Removing 'regression' label from #${gh_number}`)
-                 labels.splice(index, 1)
-             }
+          const index = labels.indexOf('regression')
+          if (index > -1) {
+            console.log(`[LABEL] Fixed! Removing 'regression' label from #${gh_number}`)
+            labels.splice(index, 1)
+          }
         }
-      } catch (e) {}
+      }
 
+      // Cleanup: deduplicate
       labels = [...new Set(labels)]
 
-      console.log(`[SYNC] Updating GitHub #${gh_number} | status: ${status} | labels: [${labels.join(', ')}]`)
+      console.log(`[SYNC] Updating GitHub #${gh_number} | status: ${status} | labels: [${labels.join(', ')}]`);
 
-      await octokit.rest.issues.update({
+      const result = await atomicAsync(() => octokit.rest.issues.update({
         owner,
         repo,
         issue_number: gh_number,
-        title,
+        title: title,
         body: formatGitHubBody(attributes, body),
-        labels,
+        labels: labels,
         state: (status === 'CLOSED' ? 'closed' : 'open')
-      })
+      }));
+      if (!result.ok) {
+        console.error(`[ERROR] Failed to update issue #${gh_number}:`, result.error);
+        continue;
+      }
     }
 
     const updatedAttributes = {
