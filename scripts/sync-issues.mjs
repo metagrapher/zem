@@ -152,7 +152,21 @@ const sync = async () => {
       }
     } else {
       console.log(`Updating issue #${gh_number}...`);
-      const labels = Array.isArray(attributes.labels) ? [...attributes.labels] : []
+      
+      // Fetch existing issue to preserve other labels
+      const existingIssue = await atomicAsync(() => octokit.issues.get({
+        owner,
+        repo,
+        issue_number: gh_number
+      }));
+
+      let labels = []
+      if (existingIssue.ok) {
+        labels = existingIssue.value.data.labels.map(l => typeof l === 'string' ? l : l.name)
+      } else {
+        labels = Array.isArray(attributes.labels) ? [...attributes.labels] : []
+      }
+
       if (status === 'IN_PROGRESS') {
         if (!labels.includes('in progress')) labels.push('in progress')
       } else {
