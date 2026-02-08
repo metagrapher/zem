@@ -261,7 +261,10 @@ export const sync = async (): Promise<void> => {
         }
 
         const frontMatterContent = Object.entries(updatedAttributes)
-            .map(([key, value]) => `${key}: ${value}`)
+            .map(([key, value]) => {
+                const cleanValue = key === 'title' ? String(value).replace(/^title:\s/i, '') : value
+                return `${key}: ${cleanValue}`
+            })
             .join('\n')
 
         const newContent = `---\n${frontMatterContent}\n---\n${body}`

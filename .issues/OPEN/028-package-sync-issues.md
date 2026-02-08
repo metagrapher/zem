@@ -1,6 +1,7 @@
 ---
 title: Package Issue Sync Logic into ZEM CLI
 status: OPEN
+gh_number: 28
 ---
 
 ## Description

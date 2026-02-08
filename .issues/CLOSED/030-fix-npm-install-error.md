@@ -1,6 +1,7 @@
 ---
 title: Fix npm install failure caused by missing @types/front-matter
 status: CLOSED
+gh_number: 30
 test_ref: tests/issue-028.test.mjs
 ---
 
