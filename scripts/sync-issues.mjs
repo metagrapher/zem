@@ -174,40 +174,45 @@ const sync = async () => {
       console.log(`Updating issue #${gh_number}...`);
       
       // Fetch existing issue to preserve other labels
-      const existingIssue = await atomicAsync(() => octokit.issues.get({
+      const existingIssue = await atomicAsync(() => octokit.rest.issues.get({
         owner,
         repo,
-        issue_number: gh_number
-      }));
+        issue_number: gh_number,
+      }))
 
       let labels = []
       if (existingIssue.ok) {
-        labels = existingIssue.value.data.labels.map(l => typeof l === 'string' ? l : l.name)
+        labels = existingIssue.value.data.labels.map(l => (typeof l === 'string' ? l : l.name))
       } else {
+        console.warn(`[WARN] Could not fetch remote labels for #${gh_number}, falling back to local.`)
         labels = Array.isArray(attributes.labels) ? [...attributes.labels] : []
       }
 
+      // 1. Manage "in progress" label (Strictly based on IN_PROGRESS status)
       if (status === 'IN_PROGRESS') {
         if (!labels.includes('in progress')) {
-          console.log(`[LABEL] Adding 'in progress' label to #${gh_number}`);
+          console.log(`[LABEL] Adding 'in progress' label to #${gh_number}`)
           labels.push('in progress')
         }
       } else {
         const index = labels.indexOf('in progress')
         if (index > -1) {
-          console.log(`[LABEL] Removing 'in progress' label from #${gh_number}`);
+          console.log(`[LABEL] Removing 'in progress' label from #${gh_number}`)
           labels.splice(index, 1)
         }
       }
 
-      // Detection of regression
+      // 2. Manage "regression" label (Detected when local status is open but remote was closed)
       if (existingIssue.ok) {
         const remoteState = existingIssue.value.data.state
         if (remoteState === 'closed' && (status === 'OPEN' || status === 'IN_PROGRESS')) {
-          console.log(`[LABEL] Regression detected on #${gh_number}. Adding 'regression' label.`);
+          console.log(`[LABEL] Regression detected on #${gh_number}. Adding 'regression' label.`)
           if (!labels.includes('regression')) labels.push('regression')
         }
       }
+
+      // Cleanup: deduplicate
+      labels = [...new Set(labels)]
 
       console.log(`[SYNC] Updating GitHub #${gh_number} | status: ${status} | labels: [${labels.join(', ')}]`);
 

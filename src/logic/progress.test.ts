@@ -8,8 +8,8 @@ test('Test A (The Solution) - PASSED', () => {
   assert.strictEqual(result, 1, 'Progress should be 1 (100%) for 1 completed task')
 })
 
-test('Test B (The Proof) - FAILED', () => {
+test('Test B (The Proof) - PASSED', () => {
   const tasks = [{ completed: true }]
   const result = calculateProgress(tasks)
-  assert.strictEqual(result, 1, 'Proof should fail now')
+  assert.strictEqual(result, 1, 'Bug fix verified')
 })

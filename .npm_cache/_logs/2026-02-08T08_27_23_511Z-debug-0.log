@@ -1,0 +1,515 @@
+0 verbose cli /Users/metagrapher/.nvm/versions/node/v25.2.1/bin/node /Users/metagrapher/.nvm/versions/node/v25.2.1/bin/npm
+1 info using npm@11.6.2
+2 info using node@v25.2.1
+3 silly config load:file:/Users/metagrapher/.nvm/versions/node/v25.2.1/lib/node_modules/npm/npmrc
+4 silly config load:file:/Users/metagrapher/Source/Metagrapher/zem/.npmrc
+5 silly config load:file:/Users/metagrapher/.npmrc
+6 silly config load:file:/Users/metagrapher/.nvm/versions/node/v25.2.1/etc/npmrc
+7 verbose title npm install @octokit/rest front-matter
+8 verbose argv "install" "--cache" ".npm_cache" "@octokit/rest" "front-matter"
+9 verbose logfile logs-max:10 dir:/Users/metagrapher/Source/Metagrapher/zem/.npm_cache/_logs/2026-02-08T08_27_23_511Z-
+10 verbose logfile /Users/metagrapher/Source/Metagrapher/zem/.npm_cache/_logs/2026-02-08T08_27_23_511Z-debug-0.log
+11 silly logfile done cleaning log files
+12 silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+13 silly idealTree buildDeps
+14 silly fetch manifest @octokit/rest@^19.0.0
+15 silly packumentCache full:https://registry.npmjs.org/@octokit%2frest cache-miss
+16 http fetch GET 200 https://registry.npmjs.org/npm 610ms
+17 http fetch GET 200 https://registry.npmjs.org/@octokit%2frest 629ms (cache miss)
+18 silly packumentCache full:https://registry.npmjs.org/@octokit%2frest set size:undefined disposed:false
+19 silly fetch manifest front-matter@^4.0.2
+20 silly packumentCache full:https://registry.npmjs.org/front-matter cache-miss
+21 http fetch GET 200 https://registry.npmjs.org/front-matter 138ms (cache miss)
+22 silly packumentCache full:https://registry.npmjs.org/front-matter set size:undefined disposed:false
+23 silly placeDep ROOT @octokit/rest@19.0.13 OK for: @metagrapher/zem@1.0.0 want: ^19.0.0
+24 silly placeDep ROOT front-matter@4.0.2 OK for: @metagrapher/zem@1.0.0 want: ^4.0.2
+25 silly fetch manifest @octokit/core@^4.2.1
+26 silly packumentCache full:https://registry.npmjs.org/@octokit%2fcore cache-miss
+27 silly fetch manifest @octokit/plugin-request-log@^1.0.4
+28 silly packumentCache full:https://registry.npmjs.org/@octokit%2fplugin-request-log cache-miss
+29 silly fetch manifest @octokit/plugin-paginate-rest@^6.1.2
+30 silly packumentCache full:https://registry.npmjs.org/@octokit%2fplugin-paginate-rest cache-miss
+31 silly fetch manifest @octokit/plugin-rest-endpoint-methods@^7.1.2
+32 silly packumentCache full:https://registry.npmjs.org/@octokit%2fplugin-rest-endpoint-methods cache-miss
+33 silly fetch manifest js-yaml@^3.13.1
+34 silly packumentCache full:https://registry.npmjs.org/js-yaml cache-miss
+35 http fetch GET 200 https://registry.npmjs.org/@octokit%2fplugin-request-log 147ms (cache miss)
+36 silly packumentCache full:https://registry.npmjs.org/@octokit%2fplugin-request-log set size:undefined disposed:false
+37 http fetch GET 200 https://registry.npmjs.org/@octokit%2fcore 208ms (cache miss)
+38 silly packumentCache full:https://registry.npmjs.org/@octokit%2fcore set size:undefined disposed:false
+39 http fetch GET 200 https://registry.npmjs.org/js-yaml 493ms (cache miss)
+40 silly packumentCache full:https://registry.npmjs.org/js-yaml set size:undefined disposed:false
+41 http fetch GET 200 https://registry.npmjs.org/@octokit%2fplugin-paginate-rest 505ms (cache miss)
+42 silly packumentCache full:https://registry.npmjs.org/@octokit%2fplugin-paginate-rest set size:undefined disposed:false
+43 http fetch GET 200 https://registry.npmjs.org/@octokit%2fplugin-rest-endpoint-methods 671ms (cache miss)
+44 silly packumentCache full:https://registry.npmjs.org/@octokit%2fplugin-rest-endpoint-methods set size:undefined disposed:false
+45 silly placeDep ROOT @octokit/core@4.2.4 OK for: @octokit/rest@19.0.13 want: ^4.2.1
+46 silly placeDep ROOT @octokit/plugin-paginate-rest@6.1.2 OK for: @octokit/rest@19.0.13 want: ^6.1.2
+47 silly placeDep ROOT @octokit/plugin-request-log@1.0.4 OK for: @octokit/rest@19.0.13 want: ^1.0.4
+48 silly placeDep ROOT @octokit/plugin-rest-endpoint-methods@7.2.3 OK for: @octokit/rest@19.0.13 want: ^7.1.2
+49 silly fetch manifest @octokit/types@^9.0.0
+50 silly packumentCache full:https://registry.npmjs.org/@octokit%2ftypes cache-miss
+51 silly fetch manifest @octokit/graphql@^5.0.0
+52 silly packumentCache full:https://registry.npmjs.org/@octokit%2fgraphql cache-miss
+53 silly fetch manifest @octokit/request@^6.0.0
+54 silly packumentCache full:https://registry.npmjs.org/@octokit%2frequest cache-miss
+55 silly fetch manifest before-after-hook@^2.2.0
+56 silly packumentCache full:https://registry.npmjs.org/before-after-hook cache-miss
+57 silly fetch manifest @octokit/auth-token@^3.0.0
+58 silly packumentCache full:https://registry.npmjs.org/@octokit%2fauth-token cache-miss
+59 silly fetch manifest universal-user-agent@^6.0.0
+60 silly packumentCache full:https://registry.npmjs.org/universal-user-agent cache-miss
+61 silly fetch manifest @octokit/request-error@^3.0.0
+62 silly packumentCache full:https://registry.npmjs.org/@octokit%2frequest-error cache-miss
+63 silly fetch manifest @octokit/types@^9.2.3
+64 silly packumentCache full:https://registry.npmjs.org/@octokit%2ftypes cache-miss
+65 silly fetch manifest @octokit/tsconfig@^1.0.2
+66 silly packumentCache full:https://registry.npmjs.org/@octokit%2ftsconfig cache-miss
+67 http fetch GET 200 https://registry.npmjs.org/before-after-hook 126ms (cache miss)
+68 silly packumentCache full:https://registry.npmjs.org/before-after-hook set size:undefined disposed:false
+69 silly fetch manifest @octokit/types@^10.0.0
+70 silly packumentCache full:https://registry.npmjs.org/@octokit%2ftypes cache-miss
+71 http fetch GET 200 https://registry.npmjs.org/@octokit%2ftypes 147ms (cache miss)
+72 silly packumentCache full:https://registry.npmjs.org/@octokit%2ftypes set size:undefined disposed:false
+73 http fetch GET 200 https://registry.npmjs.org/@octokit%2fauth-token 159ms (cache miss)
+74 silly packumentCache full:https://registry.npmjs.org/@octokit%2fauth-token set size:undefined disposed:false
+75 http fetch GET 200 https://registry.npmjs.org/@octokit%2fgraphql 161ms (cache miss)
+76 silly packumentCache full:https://registry.npmjs.org/@octokit%2fgraphql set size:undefined disposed:false
+77 http fetch GET 200 https://registry.npmjs.org/@octokit%2frequest 190ms (cache miss)
+78 silly packumentCache full:https://registry.npmjs.org/@octokit%2frequest set size:undefined disposed:false
+79 http fetch GET 200 https://registry.npmjs.org/universal-user-agent 276ms (cache miss)
+80 silly packumentCache full:https://registry.npmjs.org/universal-user-agent set size:undefined disposed:false
+81 http fetch GET 200 https://registry.npmjs.org/@octokit%2ftypes 170ms (cache miss)
+82 silly packumentCache full:https://registry.npmjs.org/@octokit%2ftypes set size:undefined disposed:false
+83 http fetch GET 200 https://registry.npmjs.org/@octokit%2ftsconfig 328ms (cache miss)
+84 silly packumentCache full:https://registry.npmjs.org/@octokit%2ftsconfig set size:undefined disposed:false
+85 http fetch GET 200 https://registry.npmjs.org/@octokit%2frequest-error 334ms (cache miss)
+86 silly packumentCache full:https://registry.npmjs.org/@octokit%2frequest-error set size:undefined disposed:false
+87 http fetch GET 200 https://registry.npmjs.org/@octokit%2ftypes 566ms (cache miss)
+88 silly packumentCache full:https://registry.npmjs.org/@octokit%2ftypes set size:undefined disposed:false
+89 silly placeDep ROOT @octokit/auth-token@3.0.4 OK for: @octokit/core@4.2.4 want: ^3.0.0
+90 silly placeDep ROOT @octokit/graphql@5.0.6 OK for: @octokit/core@4.2.4 want: ^5.0.0
+91 silly placeDep ROOT @octokit/request@6.2.8 OK for: @octokit/core@4.2.4 want: ^6.0.0
+92 silly placeDep ROOT @octokit/request-error@3.0.3 OK for: @octokit/core@4.2.4 want: ^3.0.0
+93 silly placeDep ROOT @octokit/types@9.3.2 OK for: @octokit/core@4.2.4 want: ^9.0.0
+94 silly placeDep ROOT before-after-hook@2.2.3 OK for: @octokit/core@4.2.4 want: ^2.2.0
+95 silly placeDep ROOT universal-user-agent@6.0.1 OK for: @octokit/core@4.2.4 want: ^6.0.0
+96 silly fetch manifest node-fetch@^2.6.7
+97 silly packumentCache full:https://registry.npmjs.org/node-fetch cache-miss
+98 silly fetch manifest is-plain-object@^5.0.0
+99 silly packumentCache full:https://registry.npmjs.org/is-plain-object cache-miss
+100 silly fetch manifest @octokit/endpoint@^7.0.0
+101 silly packumentCache full:https://registry.npmjs.org/@octokit%2fendpoint cache-miss
+102 silly fetch manifest once@^1.4.0
+103 silly packumentCache full:https://registry.npmjs.org/once cache-miss
+104 silly fetch manifest deprecation@^2.0.0
+105 silly packumentCache full:https://registry.npmjs.org/deprecation cache-miss
+106 silly fetch manifest @octokit/openapi-types@^18.0.0
+107 silly packumentCache full:https://registry.npmjs.org/@octokit%2fopenapi-types cache-miss
+108 http fetch GET 200 https://registry.npmjs.org/node-fetch 132ms (cache miss)
+109 silly packumentCache full:https://registry.npmjs.org/node-fetch set size:undefined disposed:false
+110 http fetch GET 200 https://registry.npmjs.org/deprecation 138ms (cache miss)
+111 silly packumentCache full:https://registry.npmjs.org/deprecation set size:undefined disposed:false
+112 http fetch GET 200 https://registry.npmjs.org/is-plain-object 139ms (cache miss)
+113 silly packumentCache full:https://registry.npmjs.org/is-plain-object set size:undefined disposed:false
+114 http fetch GET 200 https://registry.npmjs.org/once 138ms (cache miss)
+115 silly packumentCache full:https://registry.npmjs.org/once set size:undefined disposed:false
+116 http fetch GET 200 https://registry.npmjs.org/@octokit%2fendpoint 157ms (cache miss)
+117 silly packumentCache full:https://registry.npmjs.org/@octokit%2fendpoint set size:undefined disposed:false
+118 http fetch GET 200 https://registry.npmjs.org/@octokit%2fopenapi-types 157ms (cache miss)
+119 silly packumentCache full:https://registry.npmjs.org/@octokit%2fopenapi-types set size:undefined disposed:false
+120 silly placeDep ROOT @octokit/tsconfig@1.0.2 OK for: @octokit/plugin-paginate-rest@6.1.2 want: ^1.0.2
+121 silly placeDep node_modules/@octokit/plugin-rest-endpoint-methods @octokit/types@10.0.0 OK for: @octokit/plugin-rest-endpoint-methods@7.2.3 want: ^10.0.0
+122 silly fetch manifest encoding@^0.1.0
+123 silly packumentCache full:https://registry.npmjs.org/encoding cache-miss
+124 http fetch GET 200 https://registry.npmjs.org/encoding 132ms (cache miss)
+125 silly packumentCache full:https://registry.npmjs.org/encoding set size:undefined disposed:false
+126 silly placeDep ROOT @octokit/endpoint@7.0.6 OK for: @octokit/request@6.2.8 want: ^7.0.0
+127 silly placeDep ROOT is-plain-object@5.0.0 OK for: @octokit/request@6.2.8 want: ^5.0.0
+128 silly placeDep ROOT node-fetch@2.7.0 OK for: @octokit/request@6.2.8 want: ^2.6.7
+129 silly fetch manifest whatwg-url@^5.0.0
+130 silly packumentCache full:https://registry.npmjs.org/whatwg-url cache-miss
+131 http fetch GET 200 https://registry.npmjs.org/whatwg-url 175ms (cache miss)
+132 silly packumentCache full:https://registry.npmjs.org/whatwg-url set size:undefined disposed:false
+133 silly placeDep ROOT deprecation@2.3.1 OK for: @octokit/request-error@3.0.3 want: ^2.0.0
+134 silly placeDep ROOT once@1.4.0 OK for: @octokit/request-error@3.0.3 want: ^1.4.0
+135 silly fetch manifest wrappy@1
+136 silly packumentCache full:https://registry.npmjs.org/wrappy cache-miss
+137 http fetch GET 200 https://registry.npmjs.org/wrappy 91ms (cache miss)
+138 silly packumentCache full:https://registry.npmjs.org/wrappy set size:undefined disposed:false
+139 silly placeDep ROOT @octokit/openapi-types@18.1.1 OK for: @octokit/types@9.3.2 want: ^18.0.0
+140 silly placeDep node_modules/front-matter js-yaml@3.14.2 OK for: front-matter@4.0.2 want: ^3.13.1
+141 silly fetch manifest esprima@^4.0.0
+142 silly packumentCache full:https://registry.npmjs.org/esprima cache-miss
+143 silly fetch manifest argparse@^1.0.7
+144 silly packumentCache full:https://registry.npmjs.org/argparse cache-miss
+145 http fetch GET 200 https://registry.npmjs.org/esprima 128ms (cache miss)
+146 silly packumentCache full:https://registry.npmjs.org/esprima set size:undefined disposed:false
+147 http fetch GET 200 https://registry.npmjs.org/argparse 135ms (cache miss)
+148 silly packumentCache full:https://registry.npmjs.org/argparse set size:undefined disposed:false
+149 silly placeDep ROOT whatwg-url@5.0.0 OK for: node-fetch@2.7.0 want: ^5.0.0
+150 silly fetch manifest tr46@~0.0.3
+151 silly packumentCache full:https://registry.npmjs.org/tr46 cache-miss
+152 silly fetch manifest webidl-conversions@^3.0.0
+153 silly packumentCache full:https://registry.npmjs.org/webidl-conversions cache-miss
+154 http fetch GET 200 https://registry.npmjs.org/tr46 133ms (cache miss)
+155 silly packumentCache full:https://registry.npmjs.org/tr46 set size:undefined disposed:false
+156 http fetch GET 200 https://registry.npmjs.org/webidl-conversions 134ms (cache miss)
+157 silly packumentCache full:https://registry.npmjs.org/webidl-conversions set size:undefined disposed:false
+158 silly placeDep ROOT wrappy@1.0.2 OK for: once@1.4.0 want: 1
+159 silly placeDep ROOT tr46@0.0.3 OK for: whatwg-url@5.0.0 want: ~0.0.3
+160 silly placeDep ROOT webidl-conversions@3.0.1 OK for: whatwg-url@5.0.0 want: ^3.0.0
+161 silly placeDep node_modules/front-matter argparse@1.0.10 OK for: js-yaml@3.14.2 want: ^1.0.7
+162 silly placeDep ROOT esprima@4.0.1 OK for: js-yaml@3.14.2 want: ^4.0.0
+163 silly fetch manifest sprintf-js@~1.0.2
+164 silly packumentCache full:https://registry.npmjs.org/sprintf-js cache-miss
+165 http fetch GET 200 https://registry.npmjs.org/sprintf-js 205ms (cache miss)
+166 silly packumentCache full:https://registry.npmjs.org/sprintf-js set size:undefined disposed:false
+167 silly placeDep ROOT sprintf-js@1.0.3 OK for: argparse@1.0.10 want: ~1.0.2
+168 silly reify moves {}
+169 silly audit bulk request {
+169 silly audit   '@esbuild/aix-ppc64': [ '0.27.2' ],
+169 silly audit   '@esbuild/android-arm': [ '0.27.2' ],
+169 silly audit   '@esbuild/android-arm64': [ '0.27.2' ],
+169 silly audit   '@esbuild/android-x64': [ '0.27.2' ],
+169 silly audit   '@esbuild/darwin-arm64': [ '0.27.2' ],
+169 silly audit   '@esbuild/darwin-x64': [ '0.27.2' ],
+169 silly audit   '@esbuild/freebsd-arm64': [ '0.27.2' ],
+169 silly audit   '@esbuild/freebsd-x64': [ '0.27.2' ],
+169 silly audit   '@esbuild/linux-arm': [ '0.27.2' ],
+169 silly audit   '@esbuild/linux-arm64': [ '0.27.2' ],
+169 silly audit   '@esbuild/linux-ia32': [ '0.27.2' ],
+169 silly audit   '@esbuild/linux-loong64': [ '0.27.2' ],
+169 silly audit   '@esbuild/linux-mips64el': [ '0.27.2' ],
+169 silly audit   '@esbuild/linux-ppc64': [ '0.27.2' ],
+169 silly audit   '@esbuild/linux-riscv64': [ '0.27.2' ],
+169 silly audit   '@esbuild/linux-s390x': [ '0.27.2' ],
+169 silly audit   '@esbuild/linux-x64': [ '0.27.2' ],
+169 silly audit   '@esbuild/netbsd-arm64': [ '0.27.2' ],
+169 silly audit   '@esbuild/netbsd-x64': [ '0.27.2' ],
+169 silly audit   '@esbuild/openbsd-arm64': [ '0.27.2' ],
+169 silly audit   '@esbuild/openbsd-x64': [ '0.27.2' ],
+169 silly audit   '@esbuild/openharmony-arm64': [ '0.27.2' ],
+169 silly audit   '@esbuild/sunos-x64': [ '0.27.2' ],
+169 silly audit   '@esbuild/win32-arm64': [ '0.27.2' ],
+169 silly audit   '@esbuild/win32-ia32': [ '0.27.2' ],
+169 silly audit   '@esbuild/win32-x64': [ '0.27.2' ],
+169 silly audit   '@eslint-community/eslint-utils': [ '4.9.1' ],
+169 silly audit   'eslint-visitor-keys': [ '3.4.3', '4.2.1' ],
+169 silly audit   '@eslint-community/regexpp': [ '4.12.2' ],
+169 silly audit   '@eslint/config-array': [ '0.21.1' ],
+169 silly audit   '@eslint/config-helpers': [ '0.4.2' ],
+169 silly audit   '@eslint/core': [ '0.17.0' ],
+169 silly audit   '@eslint/eslintrc': [ '3.3.3' ],
+169 silly audit   '@eslint/js': [ '9.39.2' ],
+169 silly audit   '@eslint/object-schema': [ '2.1.7' ],
+169 silly audit   '@eslint/plugin-kit': [ '0.4.1' ],
+169 silly audit   '@humanfs/core': [ '0.19.1' ],
+169 silly audit   '@humanfs/node': [ '0.16.7' ],
+169 silly audit   '@humanwhocodes/module-importer': [ '1.0.1' ],
+169 silly audit   '@humanwhocodes/retry': [ '0.4.3' ],
+169 silly audit   '@types/eslint': [ '9.6.1' ],
+169 silly audit   '@types/estree': [ '1.0.8' ],
+169 silly audit   '@types/json-schema': [ '7.0.15' ],
+169 silly audit   '@types/node': [ '25.2.0' ],
+169 silly audit   '@typescript-eslint/eslint-plugin': [ '8.54.0' ],
+169 silly audit   ignore: [ '7.0.5', '5.3.2' ],
+169 silly audit   '@typescript-eslint/parser': [ '8.54.0' ],
+169 silly audit   '@typescript-eslint/project-service': [ '8.54.0' ],
+169 silly audit   '@typescript-eslint/scope-manager': [ '8.54.0' ],
+169 silly audit   '@typescript-eslint/tsconfig-utils': [ '8.54.0' ],
+169 silly audit   '@typescript-eslint/type-utils': [ '8.54.0' ],
+169 silly audit   '@typescript-eslint/types': [ '8.54.0' ],
+169 silly audit   '@typescript-eslint/typescript-estree': [ '8.54.0' ],
+169 silly audit   'brace-expansion': [ '2.0.2', '1.1.12' ],
+169 silly audit   minimatch: [ '9.0.5', '3.1.2' ],
+169 silly audit   '@typescript-eslint/utils': [ '8.54.0' ],
+169 silly audit   '@typescript-eslint/visitor-keys': [ '8.54.0' ],
+169 silly audit   acorn: [ '8.15.0' ],
+169 silly audit   'acorn-jsx': [ '5.3.2' ],
+169 silly audit   ajv: [ '6.12.6' ],
+169 silly audit   'ansi-styles': [ '4.3.0' ],
+169 silly audit   argparse: [ '2.0.1', '1.0.10' ],
+169 silly audit   'balanced-match': [ '1.0.2' ],
+169 silly audit   callsites: [ '3.1.0' ],
+169 silly audit   chalk: [ '4.1.2' ],
+169 silly audit   'color-convert': [ '2.0.1' ],
+169 silly audit   'color-name': [ '1.1.4' ],
+169 silly audit   'concat-map': [ '0.0.1' ],
+169 silly audit   'cross-spawn': [ '7.0.6' ],
+169 silly audit   debug: [ '4.4.3' ],
+169 silly audit   'deep-is': [ '0.1.4' ],
+169 silly audit   esbuild: [ '0.27.2' ],
+169 silly audit   'escape-string-regexp': [ '4.0.0' ],
+169 silly audit   eslint: [ '9.39.2' ],
+169 silly audit   'eslint-scope': [ '8.4.0' ],
+169 silly audit   espree: [ '10.4.0' ],
+169 silly audit   esquery: [ '1.7.0' ],
+169 silly audit   esrecurse: [ '4.3.0' ],
+169 silly audit   estraverse: [ '5.3.0' ],
+169 silly audit   esutils: [ '2.0.3' ],
+169 silly audit   'fast-deep-equal': [ '3.1.3' ],
+169 silly audit   'fast-json-stable-stringify': [ '2.1.0' ],
+169 silly audit   'fast-levenshtein': [ '2.0.6' ],
+169 silly audit   fdir: [ '6.5.0' ],
+169 silly audit   'file-entry-cache': [ '8.0.0' ],
+169 silly audit   'find-up': [ '5.0.0' ],
+169 silly audit   'flat-cache': [ '4.0.1' ],
+169 silly audit   flatted: [ '3.3.3' ],
+169 silly audit   'glob-parent': [ '6.0.2' ],
+169 silly audit   globals: [ '14.0.0' ],
+169 silly audit   'has-flag': [ '4.0.0' ],
+169 silly audit   'import-fresh': [ '3.3.1' ],
+169 silly audit   'resolve-from': [ '4.0.0' ],
+169 silly audit   imurmurhash: [ '0.1.4' ],
+169 silly audit   'is-extglob': [ '2.1.1' ],
+169 silly audit   'is-glob': [ '4.0.3' ],
+169 silly audit   isexe: [ '2.0.0' ],
+169 silly audit   'js-yaml': [ '4.1.1', '3.14.2' ],
+169 silly audit   'json-buffer': [ '3.0.1' ],
+169 silly audit   'json-schema-traverse': [ '0.4.1' ],
+169 silly audit   'json-stable-stringify-without-jsonify': [ '1.0.1' ],
+169 silly audit   keyv: [ '4.5.4' ],
+169 silly audit   levn: [ '0.4.1' ],
+169 silly audit   'locate-path': [ '6.0.0' ],
+169 silly audit   'lodash.merge': [ '4.6.2' ],
+169 silly audit   ms: [ '2.1.3' ],
+169 silly audit   'natural-compare': [ '1.4.0' ],
+169 silly audit   optionator: [ '0.9.4' ],
+169 silly audit   'p-limit': [ '3.1.0' ],
+169 silly audit   'p-locate': [ '5.0.0' ],
+169 silly audit   'parent-module': [ '1.0.1' ],
+169 silly audit   'path-exists': [ '4.0.0' ],
+169 silly audit   'path-key': [ '3.1.1' ],
+169 silly audit   picomatch: [ '4.0.3' ],
+169 silly audit   'prelude-ls': [ '1.2.1' ],
+169 silly audit   punycode: [ '2.3.1' ],
+169 silly audit   semver: [ '7.7.3' ],
+169 silly audit   'shebang-command': [ '2.0.0' ],
+169 silly audit   'shebang-regex': [ '3.0.0' ],
+169 silly audit   'strip-json-comments': [ '3.1.1' ],
+169 silly audit   'supports-color': [ '7.2.0' ],
+169 silly audit   tinyglobby: [ '0.2.15' ],
+169 silly audit   'ts-api-utils': [ '2.4.0' ],
+169 silly audit   'type-check': [ '0.4.0' ],
+169 silly audit   typescript: [ '5.9.3' ],
+169 silly audit   'typescript-eslint': [ '8.54.0' ],
+169 silly audit   'undici-types': [ '7.16.0' ],
+169 silly audit   'uri-js': [ '4.4.1' ],
+169 silly audit   which: [ '2.0.2' ],
+169 silly audit   'word-wrap': [ '1.2.5' ],
+169 silly audit   'yocto-queue': [ '0.1.0' ],
+169 silly audit   '@octokit/rest': [ '19.0.13' ],
+169 silly audit   'front-matter': [ '4.0.2' ],
+169 silly audit   '@octokit/core': [ '4.2.4' ],
+169 silly audit   '@octokit/plugin-paginate-rest': [ '6.1.2' ],
+169 silly audit   '@octokit/plugin-request-log': [ '1.0.4' ],
+169 silly audit   '@octokit/plugin-rest-endpoint-methods': [ '7.2.3' ],
+169 silly audit   '@octokit/auth-token': [ '3.0.4' ],
+169 silly audit   '@octokit/graphql': [ '5.0.6' ],
+169 silly audit   '@octokit/request': [ '6.2.8' ],
+169 silly audit   '@octokit/request-error': [ '3.0.3' ],
+169 silly audit   '@octokit/types': [ '9.3.2', '10.0.0' ],
+169 silly audit   'before-after-hook': [ '2.2.3' ],
+169 silly audit   'universal-user-agent': [ '6.0.1' ],
+169 silly audit   '@octokit/tsconfig': [ '1.0.2' ],
+169 silly audit   '@octokit/endpoint': [ '7.0.6' ],
+169 silly audit   'is-plain-object': [ '5.0.0' ],
+169 silly audit   'node-fetch': [ '2.7.0' ],
+169 silly audit   deprecation: [ '2.3.1' ],
+169 silly audit   once: [ '1.4.0' ],
+169 silly audit   '@octokit/openapi-types': [ '18.1.1' ],
+169 silly audit   'whatwg-url': [ '5.0.0' ],
+169 silly audit   wrappy: [ '1.0.2' ],
+169 silly audit   tr46: [ '0.0.3' ],
+169 silly audit   'webidl-conversions': [ '3.0.1' ],
+169 silly audit   esprima: [ '4.0.1' ],
+169 silly audit   'sprintf-js': [ '1.0.3' ]
+169 silly audit }
+170 http cache webidl-conversions@https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz 0ms (cache hit)
+171 http cache whatwg-url@https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz 0ms (cache hit)
+172 http cache tr46@https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz 0ms (cache hit)
+173 http cache esprima@https://registry.npmjs.org/esprima/-/esprima-4.0.1.tgz 0ms (cache hit)
+174 http cache sprintf-js@https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz 0ms (cache hit)
+175 http cache once@https://registry.npmjs.org/once/-/once-1.4.0.tgz 0ms (cache hit)
+176 http cache deprecation@https://registry.npmjs.org/deprecation/-/deprecation-2.3.1.tgz 0ms (cache hit)
+177 http cache node-fetch@https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz 0ms (cache hit)
+178 http cache @octokit/openapi-types@https://registry.npmjs.org/@octokit/openapi-types/-/openapi-types-18.1.1.tgz 0ms (cache hit)
+179 http cache wrappy@https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz 0ms (cache hit)
+180 http cache is-plain-object@https://registry.npmjs.org/is-plain-object/-/is-plain-object-5.0.0.tgz 0ms (cache hit)
+181 http cache @octokit/request-error@https://registry.npmjs.org/@octokit/request-error/-/request-error-3.0.3.tgz 0ms (cache hit)
+182 http cache @octokit/endpoint@https://registry.npmjs.org/@octokit/endpoint/-/endpoint-7.0.6.tgz 0ms (cache hit)
+183 http cache universal-user-agent@https://registry.npmjs.org/universal-user-agent/-/universal-user-agent-6.0.1.tgz 0ms (cache hit)
+184 http cache before-after-hook@https://registry.npmjs.org/before-after-hook/-/before-after-hook-2.2.3.tgz 0ms (cache hit)
+185 http cache @octokit/types@https://registry.npmjs.org/@octokit/types/-/types-9.3.2.tgz 0ms (cache hit)
+186 http cache @octokit/auth-token@https://registry.npmjs.org/@octokit/auth-token/-/auth-token-3.0.4.tgz 0ms (cache hit)
+187 http cache @octokit/plugin-rest-endpoint-methods@https://registry.npmjs.org/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-7.2.3.tgz 0ms (cache hit)
+188 http cache @octokit/tsconfig@https://registry.npmjs.org/@octokit/tsconfig/-/tsconfig-1.0.2.tgz 0ms (cache hit)
+189 http cache @octokit/request@https://registry.npmjs.org/@octokit/request/-/request-6.2.8.tgz 0ms (cache hit)
+190 http cache @octokit/plugin-paginate-rest@https://registry.npmjs.org/@octokit/plugin-paginate-rest/-/plugin-paginate-rest-6.1.2.tgz 0ms (cache hit)
+191 http cache @octokit/core@https://registry.npmjs.org/@octokit/core/-/core-4.2.4.tgz 0ms (cache hit)
+192 http cache @octokit/rest@https://registry.npmjs.org/@octokit/rest/-/rest-19.0.13.tgz 0ms (cache hit)
+193 http cache @octokit/graphql@https://registry.npmjs.org/@octokit/graphql/-/graphql-5.0.6.tgz 0ms (cache hit)
+194 http cache front-matter@https://registry.npmjs.org/front-matter/-/front-matter-4.0.2.tgz 0ms (cache hit)
+195 http cache argparse@https://registry.npmjs.org/argparse/-/argparse-1.0.10.tgz 0ms (cache hit)
+196 http cache @octokit/plugin-request-log@https://registry.npmjs.org/@octokit/plugin-request-log/-/plugin-request-log-1.0.4.tgz 0ms (cache hit)
+197 silly tarball no local data for webidl-conversions@https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz. Extracting by manifest.
+198 silly tarball no local data for whatwg-url@https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz. Extracting by manifest.
+199 silly tarball no local data for tr46@https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz. Extracting by manifest.
+200 silly tarball no local data for esprima@https://registry.npmjs.org/esprima/-/esprima-4.0.1.tgz. Extracting by manifest.
+201 silly tarball no local data for sprintf-js@https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz. Extracting by manifest.
+202 silly tarball no local data for once@https://registry.npmjs.org/once/-/once-1.4.0.tgz. Extracting by manifest.
+203 silly tarball no local data for deprecation@https://registry.npmjs.org/deprecation/-/deprecation-2.3.1.tgz. Extracting by manifest.
+204 http cache @octokit/types@https://registry.npmjs.org/@octokit/types/-/types-10.0.0.tgz 0ms (cache hit)
+205 silly tarball no local data for node-fetch@https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz. Extracting by manifest.
+206 silly tarball no local data for @octokit/openapi-types@https://registry.npmjs.org/@octokit/openapi-types/-/openapi-types-18.1.1.tgz. Extracting by manifest.
+207 silly tarball no local data for wrappy@https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz. Extracting by manifest.
+208 silly tarball no local data for is-plain-object@https://registry.npmjs.org/is-plain-object/-/is-plain-object-5.0.0.tgz. Extracting by manifest.
+209 silly tarball no local data for @octokit/request-error@https://registry.npmjs.org/@octokit/request-error/-/request-error-3.0.3.tgz. Extracting by manifest.
+210 silly tarball no local data for @octokit/endpoint@https://registry.npmjs.org/@octokit/endpoint/-/endpoint-7.0.6.tgz. Extracting by manifest.
+211 silly tarball no local data for universal-user-agent@https://registry.npmjs.org/universal-user-agent/-/universal-user-agent-6.0.1.tgz. Extracting by manifest.
+212 silly tarball no local data for before-after-hook@https://registry.npmjs.org/before-after-hook/-/before-after-hook-2.2.3.tgz. Extracting by manifest.
+213 silly tarball no local data for @octokit/types@https://registry.npmjs.org/@octokit/types/-/types-9.3.2.tgz. Extracting by manifest.
+214 http cache js-yaml@https://registry.npmjs.org/js-yaml/-/js-yaml-3.14.2.tgz 0ms (cache hit)
+215 silly tarball no local data for @octokit/auth-token@https://registry.npmjs.org/@octokit/auth-token/-/auth-token-3.0.4.tgz. Extracting by manifest.
+216 silly tarball no local data for @octokit/plugin-rest-endpoint-methods@https://registry.npmjs.org/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-7.2.3.tgz. Extracting by manifest.
+217 silly tarball no local data for @octokit/tsconfig@https://registry.npmjs.org/@octokit/tsconfig/-/tsconfig-1.0.2.tgz. Extracting by manifest.
+218 silly tarball no local data for @octokit/request@https://registry.npmjs.org/@octokit/request/-/request-6.2.8.tgz. Extracting by manifest.
+219 silly tarball no local data for @octokit/plugin-paginate-rest@https://registry.npmjs.org/@octokit/plugin-paginate-rest/-/plugin-paginate-rest-6.1.2.tgz. Extracting by manifest.
+220 silly tarball no local data for @octokit/core@https://registry.npmjs.org/@octokit/core/-/core-4.2.4.tgz. Extracting by manifest.
+221 silly tarball no local data for @octokit/rest@https://registry.npmjs.org/@octokit/rest/-/rest-19.0.13.tgz. Extracting by manifest.
+222 silly tarball no local data for @octokit/graphql@https://registry.npmjs.org/@octokit/graphql/-/graphql-5.0.6.tgz. Extracting by manifest.
+223 silly tarball no local data for front-matter@https://registry.npmjs.org/front-matter/-/front-matter-4.0.2.tgz. Extracting by manifest.
+224 silly tarball no local data for argparse@https://registry.npmjs.org/argparse/-/argparse-1.0.10.tgz. Extracting by manifest.
+225 silly tarball no local data for @octokit/plugin-request-log@https://registry.npmjs.org/@octokit/plugin-request-log/-/plugin-request-log-1.0.4.tgz. Extracting by manifest.
+226 silly tarball no local data for @octokit/types@https://registry.npmjs.org/@octokit/types/-/types-10.0.0.tgz. Extracting by manifest.
+227 silly tarball no local data for js-yaml@https://registry.npmjs.org/js-yaml/-/js-yaml-3.14.2.tgz. Extracting by manifest.
+228 http fetch GET 200 https://registry.npmjs.org/deprecation/-/deprecation-2.3.1.tgz 77ms (cache miss)
+229 http fetch GET 200 https://registry.npmjs.org/esprima/-/esprima-4.0.1.tgz 93ms (cache miss)
+230 http fetch GET 200 https://registry.npmjs.org/whatwg-url/-/whatwg-url-5.0.0.tgz 96ms (cache miss)
+231 http fetch GET 200 https://registry.npmjs.org/node-fetch/-/node-fetch-2.7.0.tgz 96ms (cache miss)
+232 http fetch GET 200 https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz 98ms (cache miss)
+233 http fetch GET 200 https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz 110ms (cache miss)
+234 http fetch GET 200 https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz 137ms (cache miss)
+235 http fetch GET 200 https://registry.npmjs.org/once/-/once-1.4.0.tgz 138ms (cache miss)
+236 http fetch GET 200 https://registry.npmjs.org/before-after-hook/-/before-after-hook-2.2.3.tgz 148ms (cache miss)
+237 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 168ms
+238 silly audit report {
+238 silly audit report   '@octokit/plugin-paginate-rest': [
+238 silly audit report     {
+238 silly audit report       id: 1102898,
+238 silly audit report       url: 'https://github.com/advisories/GHSA-h5c3-5r3r-rr8q',
+238 silly audit report       title: '@octokit/plugin-paginate-rest has a Regular Expression in iterator Leads to ReDoS Vulnerability Due to Catastrophic Backtracking',
+238 silly audit report       severity: 'moderate',
+238 silly audit report       vulnerable_versions: '>=1.0.0 <9.2.2',
+238 silly audit report       cwe: [Array],
+238 silly audit report       cvss: [Object]
+238 silly audit report     }
+238 silly audit report   ],
+238 silly audit report   '@octokit/request': [
+238 silly audit report     {
+238 silly audit report       id: 1112248,
+238 silly audit report       url: 'https://github.com/advisories/GHSA-rmvr-2pp2-xj38',
+238 silly audit report       title: '@octokit/request has a Regular Expression in fetchWrapper that Leads to ReDoS Vulnerability Due to Catastrophic Backtracking',
+238 silly audit report       severity: 'moderate',
+238 silly audit report       vulnerable_versions: '>=1.0.0 <8.4.1',
+238 silly audit report       cwe: [Array],
+238 silly audit report       cvss: [Object]
+238 silly audit report     }
+238 silly audit report   ],
+238 silly audit report   '@octokit/request-error': [
+238 silly audit report     {
+238 silly audit report       id: 1102256,
+238 silly audit report       url: 'https://github.com/advisories/GHSA-xx4v-prfh-6cgc',
+238 silly audit report       title: '@octokit/request-error has a Regular Expression in index that Leads to ReDoS Vulnerability Due to Catastrophic Backtracking',
+238 silly audit report       severity: 'moderate',
+238 silly audit report       vulnerable_versions: '>=1.0.0 <5.1.1',
+238 silly audit report       cwe: [Array],
+238 silly audit report       cvss: [Object]
+238 silly audit report     }
+238 silly audit report   ]
+238 silly audit report }
+239 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2fplugin-paginate-rest cache-miss
+240 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2frequest cache-miss
+241 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2frequest-error cache-miss
+242 http fetch GET 200 https://registry.npmjs.org/@octokit/tsconfig/-/tsconfig-1.0.2.tgz 186ms (cache miss)
+243 http fetch GET 200 https://registry.npmjs.org/@octokit/auth-token/-/auth-token-3.0.4.tgz 187ms (cache miss)
+244 http fetch GET 200 https://registry.npmjs.org/@octokit/types/-/types-9.3.2.tgz 193ms (cache miss)
+245 http fetch GET 200 https://registry.npmjs.org/@octokit/request/-/request-6.2.8.tgz 222ms (cache miss)
+246 http fetch GET 200 https://registry.npmjs.org/@octokit/rest/-/rest-19.0.13.tgz 237ms (cache miss)
+247 http fetch GET 200 https://registry.npmjs.org/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-7.2.3.tgz 243ms (cache miss)
+248 http fetch GET 200 https://registry.npmjs.org/@octokit/graphql/-/graphql-5.0.6.tgz 247ms (cache miss)
+249 http fetch GET 200 https://registry.npmjs.org/@octokit/plugin-paginate-rest/-/plugin-paginate-rest-6.1.2.tgz 252ms (cache miss)
+250 http fetch GET 200 https://registry.npmjs.org/is-plain-object/-/is-plain-object-5.0.0.tgz 257ms (cache miss)
+251 http fetch GET 200 https://registry.npmjs.org/front-matter/-/front-matter-4.0.2.tgz 262ms (cache miss)
+252 http fetch GET 200 https://registry.npmjs.org/@octokit/plugin-request-log/-/plugin-request-log-1.0.4.tgz 272ms (cache miss)
+253 http fetch GET 200 https://registry.npmjs.org/@octokit/core/-/core-4.2.4.tgz 290ms (cache miss)
+254 http fetch GET 200 https://registry.npmjs.org/wrappy/-/wrappy-1.0.2.tgz 317ms (cache miss)
+255 http fetch GET 200 https://registry.npmjs.org/argparse/-/argparse-1.0.10.tgz 316ms (cache miss)
+256 http fetch GET 200 https://registry.npmjs.org/@octokit/types/-/types-10.0.0.tgz 327ms (cache miss)
+257 http fetch GET 200 https://registry.npmjs.org/js-yaml/-/js-yaml-3.14.2.tgz 326ms (cache miss)
+258 http fetch GET 200 https://registry.npmjs.org/@octokit/request-error/-/request-error-3.0.3.tgz 338ms (cache miss)
+259 http fetch GET 200 https://registry.npmjs.org/@octokit/endpoint/-/endpoint-7.0.6.tgz 355ms (cache miss)
+260 http fetch GET 200 https://registry.npmjs.org/@octokit%2frequest-error 296ms (cache miss)
+261 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2frequest-error set size:undefined disposed:false
+262 http fetch GET 200 https://registry.npmjs.org/@octokit%2frequest 297ms (cache miss)
+263 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2frequest set size:undefined disposed:false
+264 http fetch GET 200 https://registry.npmjs.org/@octokit%2fplugin-paginate-rest 347ms (cache miss)
+265 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2fplugin-paginate-rest set size:undefined disposed:false
+266 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2frest cache-miss
+267 http fetch GET 200 https://registry.npmjs.org/@octokit/openapi-types/-/openapi-types-18.1.1.tgz 659ms (cache miss)
+268 http fetch GET 200 https://registry.npmjs.org/universal-user-agent/-/universal-user-agent-6.0.1.tgz 785ms (cache miss)
+269 http fetch GET 200 https://registry.npmjs.org/@octokit%2frest 301ms (cache miss)
+270 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2frest set size:undefined disposed:false
+271 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2fcore cache-miss
+272 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2fgraphql cache-miss
+273 http fetch GET 200 https://registry.npmjs.org/@octokit%2fcore 208ms (cache miss)
+274 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2fcore set size:undefined disposed:false
+275 http fetch GET 200 https://registry.npmjs.org/@octokit%2fgraphql 218ms (cache miss)
+276 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2fgraphql set size:undefined disposed:false
+277 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2fplugin-request-log cache-miss
+278 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2fplugin-rest-endpoint-methods cache-miss
+279 http fetch GET 200 https://registry.npmjs.org/@octokit%2fplugin-request-log 147ms (cache miss)
+280 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2fplugin-request-log set size:undefined disposed:false
+281 http fetch GET 200 https://registry.npmjs.org/@octokit%2fplugin-rest-endpoint-methods 156ms (cache miss)
+282 silly packumentCache corgi:https://registry.npmjs.org/@octokit%2fplugin-rest-endpoint-methods set size:undefined disposed:false
+283 silly ADD node_modules/sprintf-js
+284 silly ADD node_modules/esprima
+285 silly ADD node_modules/webidl-conversions
+286 silly ADD node_modules/tr46
+287 silly ADD node_modules/wrappy
+288 silly ADD node_modules/whatwg-url
+289 silly ADD node_modules/@octokit/openapi-types
+290 silly ADD node_modules/once
+291 silly ADD node_modules/deprecation
+292 silly ADD node_modules/node-fetch
+293 silly ADD node_modules/is-plain-object
+294 silly ADD node_modules/@octokit/endpoint
+295 silly ADD node_modules/@octokit/tsconfig
+296 silly ADD node_modules/universal-user-agent
+297 silly ADD node_modules/before-after-hook
+298 silly ADD node_modules/@octokit/types
+299 silly ADD node_modules/@octokit/request-error
+300 silly ADD node_modules/@octokit/request
+301 silly ADD node_modules/@octokit/graphql
+302 silly ADD node_modules/@octokit/auth-token
+303 silly ADD node_modules/@octokit/plugin-rest-endpoint-methods
+304 silly ADD node_modules/@octokit/plugin-rest-endpoint-methods/node_modules/@octokit/types
+305 silly ADD node_modules/@octokit/plugin-request-log
+306 silly ADD node_modules/@octokit/plugin-paginate-rest
+307 silly ADD node_modules/@octokit/core
+308 silly ADD node_modules/front-matter
+309 silly ADD node_modules/front-matter/node_modules/argparse
+310 silly ADD node_modules/front-matter/node_modules/js-yaml
+311 silly ADD node_modules/@octokit/rest
+312 verbose cwd /Users/metagrapher/Source/Metagrapher/zem
+313 verbose os Darwin 25.3.0
+314 verbose node v25.2.1
+315 verbose npm  v11.6.2
+316 notice
+316 notice New minor version of npm available! 11.6.2 -> 11.9.0
+316 notice Changelog: https://github.com/npm/cli/releases/tag/v11.9.0
+316 notice To update run: npm install -g npm@11.9.0
+316 notice  { force: true, Symbol(proc-log.meta): true }
+317 verbose exit 0
+318 info ok
