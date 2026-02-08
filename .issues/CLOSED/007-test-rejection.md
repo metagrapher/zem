@@ -13,3 +13,4 @@ This is a proof-of-concept issue to verify that the sync script correctly reject
 - [x] Verify `in progress` label is applied to GitHub issue #7
 - [x] Confirm local filename matches GitHub issue number
 
+<!-- trigger sync Sun Feb  8 03:22:02 CST 2026 -->
