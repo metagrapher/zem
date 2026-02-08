@@ -7,7 +7,9 @@ const command = process.argv[2]
 
 switch (command) {
     case 'audit':
-        audit().catch(err => {
+        audit().then(code => {
+            process.exit(code)
+        }).catch(err => {
             console.error('Audit failed:', err)
             process.exit(1)
         })
