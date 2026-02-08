@@ -1,7 +1,7 @@
 ---
 title: Resolve Environmental Coverage Restrictions
-status: CLOSED
-verification: PASS
+status: OPEN
+verification: FAIL
 gh_number: 19
 test_ref: tests/verify-coverage.test.mjs
 ---
