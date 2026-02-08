@@ -1,10 +1,8 @@
 ---
 title: Test Rejection Verification
-status: CLOSED
+status: OPEN
 gh_number: 7
-test_ref: src/logic/progress.test.ts
 ---
-
 ## Description
 This is a proof-of-concept issue to verify that the sync script correctly rejects a 'CLOSED' state when tests fail, and instead promotes the issue to 'IN_PROGRESS' with the appropriate label.
 
