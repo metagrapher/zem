@@ -52,6 +52,18 @@ const result = safeDivision(10, 2)
 const next = map(result, n => n + 5) // Ok(10)
 ```
 
+### Why is this better?
+
+When `safeDivision(1, 0)` runs, it does **not crash** or throw an exception. It returns a value representing failure: `Err('DIVIDE_BY_ZERO')`.
+
+If you try to use this result directly—like `safeDivision(1, 0) + 5`—TypeScript will stop you:
+```typescript
+const result = safeDivision(10, 0)
+// console.log(result + 5) // ❌ TypeScript Error: Operator '+' cannot be applied to type 'Result'
+```
+
+**You cannot use the value until you handle the possibility of failure.** If you ignore it, type checking stops you. This converts potential runtime crashes into compile-time checks.
+
 #### Composition & Pipelining
 
 ZEM is designed for composition. While the base functions (`map`, `chain`) are data-first, you can easily create data-last wrappers or simple composition helpers to build pipelines.
