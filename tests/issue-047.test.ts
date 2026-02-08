@@ -2,7 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
 
-test('Issue #043: Coverage Debt Witness', async (t) => {
+test('Issue #047: Coverage Debt Witness', async (t) => {
     // Run coverage to get current levels
     const result = spawnSync('npm', ['run', 'test:coverage'], { encoding: 'utf8' })
     const output = result.stdout + result.stderr

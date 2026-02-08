@@ -1,8 +1,8 @@
 ---
 title: Restore Coverage Gate to 90%
 status: IN_PROGRESS
-gh_number: 43
-test_ref: tests/issue-043.test.ts
+gh_number: 47
+test_ref: tests/issue-047.test.ts
 ---
 
 ## Objective

@@ -213,7 +213,7 @@ export async function audit(config: AuditConfig = { baseDir: process.cwd() }): P
         const branchPct = parseFloat(coverageMatch[2])
         log(`Signal Integrity: Line ${linePct}%, Branch ${branchPct}%`)
         
-        // TECHNICAL DEBT (#043): Branch coverage target is 90%. 
+        // TECHNICAL DEBT (#047): Branch coverage target is 90%. 
         // Temporarily lowered to 80% to allow backfill.
         if (branchPct < 80 || linePct < 25) { 
             err('\x1b[31m%s\x1b[0m', `NO SIGNAL: Coverage threshold not met (Line: ${linePct}%, Branch: ${branchPct}%)`)
