@@ -1,10 +1,10 @@
 ---
-title: Restore Coverage Gate to 90%
-status: IN_PROGRESS
+title: "Restore Coverage Gate to 90%"
+status: OPEN
 gh_number: 47
 test_ref: tests/issue-047.test.ts
+verification: FAIL
 ---
-
 ## Objective
 Restore the branch coverage threshold in the Mechanical Auditor to the standard 90% target.
 
