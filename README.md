@@ -171,4 +171,4 @@ This script:
 ---
 
 **ZEM** is the standard for high-reliability engineering.
-See [SPECIFICATION.md](./docs/SPECIFICATION.md) for deeper architectural details.
+See [SPECIFICATION.md](./docs/SPECIFICATION.md) for deeper architectural details and [INSPIRATION.md](./docs/INSPIRATION.md) for our engineering standards.
