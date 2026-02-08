@@ -168,11 +168,19 @@ const sync = async () => {
       }
 
       if (status === 'IN_PROGRESS') {
-        if (!labels.includes('in progress')) labels.push('in progress')
+        if (!labels.includes('in progress')) {
+          console.log(`[LABEL] Adding 'in progress' label to #${gh_number}`);
+          labels.push('in progress')
+        }
       } else {
         const index = labels.indexOf('in progress')
-        if (index > -1) labels.splice(index, 1)
+        if (index > -1) {
+          console.log(`[LABEL] Removing 'in progress' label from #${gh_number}`);
+          labels.splice(index, 1)
+        }
       }
+
+      console.log(`[SYNC] Updating GitHub #${gh_number} | status: ${status} | labels: [${labels.join(', ')}]`);
 
       const result = await atomicAsync(() => octokit.issues.update({
         owner,
