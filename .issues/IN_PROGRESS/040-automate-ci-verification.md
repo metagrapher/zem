@@ -12,5 +12,7 @@ Local development environments may vary from the actual installation or executio
 ## Tasks
 - [x] Define `.github/workflows/verify.yml` with Node.js setup.
 - [x] Implement `npm run zem` in the workflow.
-- [ ] Verify that coverage collection works in the CI environment (referencing #19 fixes).
-- [ ] Confirm integration with the issue syncing mechanism (if applicable).
+- [x] Verify that coverage collection works in the CI environment (referencing #19 fixes).
+- [x] Confirm integration with the issue syncing mechanism (if applicable).
+
+**Final Note**: The audit has been harmonized. `npm run zem` now calls the internal `zem audit` CLI command, ensuring identical behavior for framework developers and package users. CI performs the same check as local dev.

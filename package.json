@@ -27,10 +27,10 @@
         "build": "tsc --project tsconfig.build.json && esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js && esbuild src/eslint/index.ts --bundle --format=esm --outfile=dist/eslint/index.js --platform=node && esbuild src/cli.ts --bundle --format=esm --outfile=dist/cli.js --platform=node --packages=external",
         "test": "node --experimental-strip-types --test src/**/*.test.ts tests/**/*.test.mjs scripts/**/*.test.*",
         "test:coverage": "mkdir -p coverage-data && TMPDIR=$PWD/coverage-data node --experimental-strip-types --experimental-test-coverage --test src/**/*.test.ts tests/**/*.test.mjs scripts/**/*.test.*",
+        "structural-check": "node dist/cli.js audit",
         "typecheck": "tsc --noEmit",
         "lint": "eslint .",
-        "structural-check": "node --experimental-strip-types scripts/structural-audit.ts",
-        "zem": "npm run structural-check && npm run typecheck && npm run test:coverage",
+        "zem": "npm run build && npm run structural-check && npm run typecheck && npm run test:coverage",
         "watch:tests": "node --experimental-strip-types scripts/scaffold-tests.ts",
         "dev": "node --experimental-strip-types --watch src/index.ts"
     },

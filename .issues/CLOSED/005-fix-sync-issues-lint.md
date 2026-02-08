@@ -2,6 +2,8 @@
 title: "Fix Linting for sync-issues.mjs"
 status: CLOSED
 gh_number: 5
+test_ref: tests/legacy.test.mjs
+verification: PASS
 ---
 # Issue 002: Fix Linting for sync-issues.mjs
 

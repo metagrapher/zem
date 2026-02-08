@@ -2,6 +2,8 @@
 title: "Repair Issue Synchronization"
 status: CLOSED
 gh_number: 6
+test_ref: tests/legacy.test.mjs
+verification: PASS
 ---
 ## Description
 The issue synchronization script and workflow are not correctly handling the subdirectories in `.issues/` (OPEN and CLOSED). The script also needs to be more robust in finding issue metadata if front-matter is missing or if files are moved.
