@@ -1,5 +1,5 @@
 ---
-title: RFC: Data-Last Transformation API for Pipelining
+title: "RFC: Data-Last Transformation API for Pipelining"
 status: OPEN
 ---
 

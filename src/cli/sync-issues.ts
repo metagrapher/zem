@@ -265,7 +265,9 @@ export const sync = async (): Promise<void> => {
             }))
 
             if (!result.ok) {
-                console.error(`[ERROR] Failed to update issue #${gh_number}:`, result.error)
+                const errorData = (result.error as any).response?.data
+                const details = errorData ? JSON.stringify(errorData.errors || errorData.message) : result.error
+                console.error(`[ERROR] Failed to update issue #${gh_number}: ${details}`)
                 continue
             }
         }
@@ -279,7 +281,10 @@ export const sync = async (): Promise<void> => {
 
         const frontMatterContent = Object.entries(updatedAttributes)
             .map(([key, value]) => {
-                const cleanValue = key === 'title' ? String(value).replace(/^title:\s/i, '') : value
+                let cleanValue = value
+                if (key === 'title') {
+                    cleanValue = `"${String(value).replace(/^title:\s/i, '').replace(/"/g, '\\"')}"`
+                }
                 return `${key}: ${cleanValue}`
             })
             .join('\n')
