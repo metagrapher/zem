@@ -73,9 +73,30 @@ const checkStructuralIntegrity = () => {
 
     const duplicates = Object.entries(ghNumberMap).filter(([_, files]) => files.length > 1)
     if (duplicates.length > 0) {
-        console.error('\x1b[31m%s\x1b[0m', 'NO SIGNAL: Duplicate gh_number detected:')
+        console.error('\x1b[31m%s\x1b[0m', 'NO SIGNAL: Duplicate gh_number detected in metadata:')
         duplicates.forEach(([num, files]) => {
             console.error(` - gh_number: ${num} found in: ${files.join(', ')}`)
+        })
+        process.exit(1)
+    }
+
+    // New Audit: filename prefix deduplication
+    const prefixMap: Record<string, string[]> = {}
+    issueFiles.forEach(file => {
+        const name = basename(file)
+        const match = name.match(/^(\d+)-/)
+        if (match) {
+            const prefix = match[1]
+            if (!prefixMap[prefix]) prefixMap[prefix] = []
+            prefixMap[prefix].push(relative(process.cwd(), file))
+        }
+    })
+
+    const prefixDuplicates = Object.entries(prefixMap).filter(([_, files]) => files.length > 1)
+    if (prefixDuplicates.length > 0) {
+        console.error('\x1b[31m%s\x1b[0m', 'NO SIGNAL: Duplicate issue number prefixes detected in filenames:')
+        prefixDuplicates.forEach(([prefix, files]) => {
+            console.error(` - Prefix ${prefix} found in: ${files.join(', ')}`)
         })
         process.exit(1)
     }

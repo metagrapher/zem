@@ -1,11 +1,9 @@
 ---
-title: title: Standardize ESLint Coverage
+title: Standardize ESLint Coverage
 status: OPEN
 gh_number: 23
 ---
-title: Standardize ESLint Coverage
-status: OPEN
----
+
 ## Description
 The current `eslint.config.js` is fragmented and uses restrictive file patterns (missing `.mjs`) and directory-specific overrides. This leads to inconsistent linting coverage across the project.
 
