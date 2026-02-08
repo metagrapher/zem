@@ -113,6 +113,7 @@ export const sync = async (): Promise<void> => {
     }
 
     const filePaths = findFiles(ISSUES_DIR)
+    const syncedNumbers = new Set<number>()
 
     for (let filePath of filePaths) {
         if (!fs.existsSync(filePath)) continue
@@ -145,6 +146,10 @@ export const sync = async (): Promise<void> => {
         const targetPath = path.join(ISSUES_DIR, targetDir, path.basename(filePath))
 
         if (filePath !== targetPath) {
+            if (fs.existsSync(targetPath)) {
+                console.error(`[COLLISION] Cannot move ${filePath} to ${targetPath}: destination already exists!`)
+                process.exit(1)
+            }
             console.log(`[MOVE] Moving ${file} to ${targetDir}/`)
             if (!fs.existsSync(path.dirname(targetPath))) {
                 fs.mkdirSync(path.dirname(targetPath), { recursive: true })
@@ -155,12 +160,23 @@ export const sync = async (): Promise<void> => {
 
         let gh_number = attributes.gh_number
 
+        if (gh_number && syncedNumbers.has(gh_number)) {
+            console.error(`[COLLISION] Duplicate gh_number #${gh_number} detected in local issues! Sync aborted to prevent data corruption.`)
+            process.exit(1)
+        }
+        if (gh_number) syncedNumbers.add(gh_number)
+
         if (!gh_number) {
             console.log(`[SYNC] Searching GitHub for issue: "${title}"`)
             const existing = await findExistingIssueByTitle(title)
             if (existing) {
                 gh_number = existing.number
                 console.log(`[SYNC] Matched existing issue #${gh_number}`)
+                if (syncedNumbers.has(gh_number)) {
+                    console.error(`[COLLISION] Issue #${gh_number} ("${title}") matched from GitHub is already claimed by another local file! Sync aborted.`)
+                    process.exit(1)
+                }
+                syncedNumbers.add(gh_number)
             }
         }
 
@@ -185,6 +201,7 @@ export const sync = async (): Promise<void> => {
             if (result.ok) {
                 gh_number = result.value.data.number
                 console.log(`Created GitHub Issue #${gh_number}`)
+                syncedNumbers.add(gh_number)
             } else {
                 console.error(`[ERROR] Failed to create issue ${file}:`, result.error)
                 continue
@@ -279,6 +296,10 @@ export const sync = async (): Promise<void> => {
         if (!currentName.startsWith(ghPrefix)) {
             const newName = `${ghPrefix}-${currentName.replace(/^\d+-/, '')}`
             const finalPath = path.join(path.dirname(filePath), newName)
+            if (fs.existsSync(finalPath)) {
+                console.error(`[COLLISION] Cannot rename ${filePath} to ${finalPath}: destination already exists!`)
+                process.exit(1)
+            }
             console.log(`[RENAME] Renaming local issue to match GitHub #${gh_number}: ${newName}`)
             fs.renameSync(filePath, finalPath)
         }
