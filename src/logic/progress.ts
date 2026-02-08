@@ -1,3 +1,5 @@
 export const calculateProgress = (tasks: { completed: boolean }[]) => {
-  return 0 // Sabotaged
+  if (tasks.length === 0) return 1
+  const completed = tasks.filter(t => t.completed).length
+  return completed / tasks.length
 }
