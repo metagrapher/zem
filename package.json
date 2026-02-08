@@ -45,6 +45,8 @@
         "esbuild": "^0.27.2",
         "eslint": "^9.20.1",
         "typescript": "^5.9.3",
-        "typescript-eslint": "^8.54.0"
+        "typescript-eslint": "^8.54.0",
+        "@octokit/rest": "^19.0.0",
+        "front-matter": "^4.0.2"
     }
 }
