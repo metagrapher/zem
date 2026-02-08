@@ -206,6 +206,17 @@ const sync = async () => {
       console.log(`[SYNC] Updating local file: ${file}`)
       fs.writeFileSync(filePath, newContent)
     }
+
+    // Rename file if prefix doesn't match gh_number
+    const currentName = path.basename(filePath)
+    const ghPrefix = String(gh_number).padStart(3, '0')
+    if (!currentName.startsWith(ghPrefix)) {
+      const newName = `${ghPrefix}-${currentName.replace(/^\d+-/, '')}`
+      const finalPath = path.join(path.dirname(filePath), newName)
+      console.log(`[RENAME] Renaming local issue to match GitHub #${gh_number}: ${newName}`)
+      fs.renameSync(filePath, finalPath)
+      filePath = finalPath
+    }
   }
 }
 
