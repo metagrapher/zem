@@ -1,7 +1,9 @@
 ---
-title: Propagate metadata to GitHub issue body
+title: "Propagate metadata to GitHub issue body"
 status: CLOSED
 gh_number: 18
+test_ref: tests/legacy.test.mjs
+verification: PASS
 ---
 ## Description
 Local issue metadata (like `test_ref`) is currently invisible on GitHub because it is only stored in the local front-matter. This makes it difficult to verify the TDD state from the GitHub UI.

@@ -1,9 +1,9 @@
 ---
 title: Resolve Environmental Coverage Restrictions
-status: OPEN
+status: CLOSED
 gh_number: 19
 test_ref: tests/verify-coverage.test.mjs
-verification: FAIL
+verification: PASS
 ---
 ## Description
 The sandbox environment restricts `mkdtemp` in the system `/var` directory, causing Node.js experimental coverage to fail with `EPERM`. This prevents the mechanical audit from passing.
@@ -13,4 +13,4 @@ The sandbox environment restricts `mkdtemp` in the system `/var` directory, caus
 - [x] Update `package.json` to use local `coverage-data/` for coverage temp files.
 - [x] Ensure `.gitignore` ignores the coverage data.
 - [x] Fix unused imports in related test utility scripts.
-- [ ] Verify full audit passes with `npm run zem`.
+- [x] Verify full audit passes with `npm run zem`.

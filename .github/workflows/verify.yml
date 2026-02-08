@@ -1,0 +1,28 @@
+name: CI Verification
+
+on:
+  push:
+    branches:
+      - primary
+  pull_request:
+    branches:
+      - primary
+
+jobs:
+  verify:
+    name: Mechanical Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run ZEM Audit
+        run: npm run zem

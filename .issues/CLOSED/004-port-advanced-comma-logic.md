@@ -1,7 +1,9 @@
 ---
-title: Port Advanced Comma Logic
+title: "Port Advanced Comma Logic"
 status: CLOSED
 gh_number: 4
+test_ref: src/eslint/rules/leading-commas.test.ts
+verification: PASS
 ---
 # Issue 001: Port Advanced Comma Logic
 

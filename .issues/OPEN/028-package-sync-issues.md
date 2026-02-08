@@ -1,9 +1,8 @@
 ---
-title: Package Issue Sync Logic into ZEM CLI
+title: "Package Issue Sync Logic into ZEM CLI"
 status: OPEN
 gh_number: 28
 ---
-
 ## Description
 To enable other projects to easily adopt the "Infrastructure as Code" issue management workflow, we will package the `sync-issues.mjs` script into the core `zem` library as a CLI command. This eliminates the need for manual script copying and ensures all projects benefit from upstream improvements.
 
