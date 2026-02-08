@@ -101,9 +101,8 @@ const sync = async () => {
     const content = fs.readFileSync(filePath, 'utf8')
     const { attributes, body } = fm(content)
     const title = attributes.title || body.split('\n')[0].replace(/^#\s(Issue\s\d+:\s)?/, '').trim()
-    const isClosedRequest = attributes.status === 'CLOSED' || filePath.includes('/CLOSED/')
-    const isInProgressRequest = attributes.status === 'IN_PROGRESS' || filePath.includes('/IN_PROGRESS/')
-    let status = isClosedRequest ? 'CLOSED' : (isInProgressRequest ? 'IN_PROGRESS' : (attributes.status || 'OPEN'))
+    const dirStatus = filePath.includes('/CLOSED/') ? 'CLOSED' : (filePath.includes('/IN_PROGRESS/') ? 'IN_PROGRESS' : 'OPEN')
+    let status = attributes.status || dirStatus
 
     // Capture verification status
     if (attributes.test_ref) {
