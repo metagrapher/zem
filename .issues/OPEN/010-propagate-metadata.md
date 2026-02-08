@@ -1,6 +1,6 @@
 ---
 title: Propagate metadata to GitHub issue body
-status: OPEN
+status: CLOSED
 ---
 
 ## Description

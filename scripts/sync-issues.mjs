@@ -77,7 +77,13 @@ const findFiles = (dir) => {
 const formatGitHubBody = (attributes, body) => {
   const metadata = Object.entries(attributes)
     .filter(([key]) => !['title', 'status', 'gh_number', 'labels'].includes(key))
-    .map(([key, value]) => `- **${key}**: ${value}`)
+    .map(([key, value]) => {
+      let displayValue = value
+      if (key === 'verification') {
+        displayValue = value === 'PASS' ? '✅ PASS' : (value === 'IN_PROGRESS' ? '🧪 IN_PROGRESS (Proof Passes)' : '❌ FAIL')
+      }
+      return `- **${key}**: ${displayValue}`
+    })
     .join('\n')
 
   if (!metadata) return body
@@ -99,9 +105,11 @@ const sync = async () => {
     const isInProgressRequest = attributes.status === 'IN_PROGRESS' || filePath.includes('/IN_PROGRESS/')
     let status = isClosedRequest ? 'CLOSED' : (isInProgressRequest ? 'IN_PROGRESS' : (attributes.status || 'OPEN'))
 
-    // Always verify if test_ref is present
+    // Capture verification status
     if (attributes.test_ref) {
       const verification = verifyTests(attributes.test_ref)
+      attributes.verification = verification.ok ? 'PASS' : (verification.status === 'IN_PROGRESS' ? 'IN_PROGRESS' : 'FAIL')
+      
       if (status === 'CLOSED' && !verification.ok) {
         console.warn(`[WARN] Issue ${file} cannot be CLOSED: ${verification.reason}. Moving to ${verification.status}.`)
         status = verification.status
