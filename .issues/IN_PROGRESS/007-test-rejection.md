@@ -1,6 +1,6 @@
 ---
 title: Test Rejection Verification
-status: IN_PROGRESS
+status: OPEN
 gh_number: 7
 test_ref: src/logic/progress.test.ts
 verification: IN_PROGRESS
