@@ -40,10 +40,12 @@
     "author": "Metagrapher",
     "license": "MIT",
     "devDependencies": {
+        "@octokit/rest": "^19.0.13",
         "@types/eslint": "^9.6.1",
         "@types/node": "^25.2.0",
         "esbuild": "^0.27.2",
         "eslint": "^9.20.1",
+        "front-matter": "^4.0.2",
         "typescript": "^5.9.3",
         "typescript-eslint": "^8.54.0"
     }

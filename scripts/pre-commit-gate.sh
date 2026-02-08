@@ -37,5 +37,12 @@ if [[ "$SIGNING_ENABLED" != "true" ]]; then
   exit 1
 fi
 
+# 4. Structural Integrity Audit
+npm run structural-check
+if [[ $? -ne 0 ]]; then
+  echo -e "\x1b[31m[ERROR] Structural Audit Failed: Ensure modular testing and unique gh_numbers.\x1b[0m"
+  exit 1
+fi
+
 echo -e "\x1b[32m[PASS] Mechanical Gate passed. Proceeding with atomic commit.\x1b[0m"
 exit 0

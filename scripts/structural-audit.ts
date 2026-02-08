@@ -1,12 +1,14 @@
-import { readdirSync, statSync, existsSync } from 'node:fs'
+import { readdirSync, statSync, existsSync, readFileSync } from 'node:fs'
 import { join, relative, basename } from 'node:path'
 
 const SRC_DIR = join(process.cwd(), 'src')
 const TEST_DIR = join(process.cwd(), 'tests')
+const ISSUES_DIR = join(process.cwd(), '.issues')
 const IGNORED_FILES = ['index.ts', 'Indexer.ts']
 const IGNORED_EXT = ['.d.ts']
 
 const getAllFiles = (dir: string): string[] => {
+    if (!existsSync(dir)) return []
     const files = readdirSync(dir)
     return files.flatMap((file) => {
         const path = join(dir, file)
@@ -55,7 +57,30 @@ const checkStructuralIntegrity = () => {
         process.exit(1)
     }
 
-    console.log('\x1b[32m%s\x1b[0m', 'SIGNAL OK: All modules have corresponding verification context.')
+    // New Audit: gh_number deduplication
+    const issueFiles = getAllFiles(ISSUES_DIR).filter(f => f.endsWith('.md'))
+    const ghNumberMap: Record<string, string[]> = {}
+
+    issueFiles.forEach(file => {
+        const content = readFileSync(file, 'utf8')
+        const match = content.match(/gh_number:\s*(\d+)/)
+        if (match) {
+            const num = match[1]
+            if (!ghNumberMap[num]) ghNumberMap[num] = []
+            ghNumberMap[num].push(relative(process.cwd(), file))
+        }
+    })
+
+    const duplicates = Object.entries(ghNumberMap).filter(([_, files]) => files.length > 1)
+    if (duplicates.length > 0) {
+        console.error('\x1b[31m%s\x1b[0m', 'NO SIGNAL: Duplicate gh_number detected:')
+        duplicates.forEach(([num, files]) => {
+            console.error(` - gh_number: ${num} found in: ${files.join(', ')}`)
+        })
+        process.exit(1)
+    }
+
+    console.log('\x1b[32m%s\x1b[0m', 'SIGNAL OK: All modules have verification context and gh_numbers are unique.')
 }
 
 checkStructuralIntegrity()
