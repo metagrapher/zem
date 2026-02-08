@@ -3,6 +3,7 @@ title: Implement issue deduplication check in pre-commit hook
 status: CLOSED
 gh_number: 17
 test_ref: src/logic/dedupe.test.ts
+verification: PASS
 ---
 ## Description
 The issue synchronization system relies on unique `gh_number` values in the front-matter of local issue files. Accidental duplication of these numbers can lead to unpredictable behavior and data loss during sync.

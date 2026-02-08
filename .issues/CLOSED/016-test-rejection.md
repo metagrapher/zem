@@ -3,6 +3,7 @@ title: Deprecated Rejection Test
 status: CLOSED
 gh_number: 16
 test_ref: src/logic/identity.test.ts
+verification: PASS
 ---
 # Issue 016: Deprecated Rejection Test
 This issue was originally a duplicate of the rejection test logic. It is officially deprecated.
