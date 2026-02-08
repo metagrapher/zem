@@ -202,12 +202,18 @@ const sync = async () => {
         }
       }
 
-      // 2. Manage "regression" label (Detected when local status is open but remote was closed)
+      // 2. Manage "regression" label
       if (existingIssue.ok) {
         const remoteState = existingIssue.value.data.state
         if (remoteState === 'closed' && (status === 'OPEN' || status === 'IN_PROGRESS')) {
           console.log(`[LABEL] Regression detected on #${gh_number}. Adding 'regression' label.`)
           if (!labels.includes('regression')) labels.push('regression')
+        } else if (status === 'CLOSED') {
+          const index = labels.indexOf('regression')
+          if (index > -1) {
+            console.log(`[LABEL] Fixed! Removing 'regression' label from #${gh_number}`)
+            labels.splice(index, 1)
+          }
         }
       }
 
