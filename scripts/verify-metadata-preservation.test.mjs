@@ -1,7 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import { spawnSync } from 'child_process'
-import assert from 'node:assert/strict'
 import test from 'node:test'
 
 test('Metadata preservation proof', async () => {

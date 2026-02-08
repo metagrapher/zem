@@ -22,7 +22,7 @@
     "scripts": {
         "build": "tsc --project tsconfig.build.json && esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js && esbuild src/eslint/index.ts --bundle --format=esm --outfile=dist/eslint/index.js --platform=node",
         "test": "node --experimental-strip-types --test src/**/*.test.ts",
-        "test:coverage": "node --experimental-strip-types --experimental-test-coverage --test src/**/*.test.ts",
+        "test:coverage": "mkdir -p coverage-data && TMPDIR=$PWD/coverage-data node --experimental-strip-types --experimental-test-coverage --test src/**/*.test.ts",
         "typecheck": "tsc --noEmit",
         "lint": "eslint .",
         "structural-check": "node --experimental-strip-types scripts/structural-audit.ts",
