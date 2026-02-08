@@ -54,24 +54,18 @@ const next = map(result, n => n + 5) // Ok(10)
 
 ### Why is this better?
 
-If `safeDivision(1, 0)` simply threw an error, your program would crash unless you remembered to wrap it in a `try/catch`. This is easy to forget.
+The core principle of ZEM is that the **failure is a value**.
 
-With ZEM, `safeDivision` returns a `Result` object. This forces you to handle the failure scenario **before** you can access the value.
+When you call `safeDivision(1, 0)`, it does NOT crash or throw. It returns an object: `{ success: false, error: 'DIVIDE_BY_ZERO' }`.
 
-**It converts a potential runtime crash into a compile-time check.**
+If you try to use this result directly—like checking `safeDivision(1,0) + 5`—TypeScript will stop you: "Operator '+' cannot be applied to types 'Result' and 'number'."
 
-```typescript
-const result = safeDivision(10, 0)
+**You cannot use the value until you handle the possibility of failure.**
 
-// ❌ UNSAFE: Using the result directly is blocked by TypeScript.
-// console.log(result + 5) // Error: Operator '+' cannot be applied to type 'Result'
+If you ignore it, type checking stops you (Compile-Time Error).
+If you handle it (using `map`, `chain`, or checking `.success`), your code is forced to decide what to do in the error case explicitly.
 
-// ✅ SAFE: Use 'map' to transform the success case only.
-// If result is an error, 'map' skips the computation and passes the error along.
-const safeOutput = map(result, (n) => n + 5) 
-```
-
-You can chain operations confidently, knowing that errors will propagate safely without crashing your application.
+This converts potential **Runtime Crashes** (app failure) into **Compile-Time Checks** (build failure).
 
 #### Composition & Pipelining
 
