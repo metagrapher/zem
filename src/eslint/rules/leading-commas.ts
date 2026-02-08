@@ -10,9 +10,11 @@ interface CheckListOptions {
   minItems?: number
   parentIndent?: string
   wallOffset?: number
-  isParams?: boolean
-  isArgs?: boolean
-  newlineFirst?: boolean
+  isParams?: boolean | undefined
+  isArgs?: boolean | undefined
+  newlineFirst?: boolean | undefined
+  wallColumn?: number | undefined
+  closeIndent?: number | undefined // Added to distinguish from wall
 }
 
 export const leadingCommas: Rule.RuleModule = {
@@ -26,15 +28,15 @@ export const leadingCommas: Rule.RuleModule = {
   create(context: Rule.RuleContext) {
     const sourceCode = context.sourceCode || context.getSourceCode()
 
-    const getIndent = (locOrNode: Rule.Node | AST.SourceLocation | AST.Token | null): string => {
-      if (!locOrNode) return ''
+    const getIndentSize = (locOrNode: Rule.Node | AST.SourceLocation | AST.Token | null): number => {
+      if (!locOrNode) return 0
       const loc = (locOrNode as any).loc || (locOrNode as AST.SourceLocation)
-      if (!loc) return ''
+      if (!loc) return 0
       const lineIndex = loc.start.line - 1
       const line = sourceCode.lines[lineIndex]
-      if (line === undefined) return ''
+      if (line === undefined) return 0
       const match = line.match(/^\s*/)
-      return match ? match[0] : ''
+      return match ? match[0].length : 0
     }
 
     const checkList = (
@@ -44,62 +46,81 @@ export const leadingCommas: Rule.RuleModule = {
     , closeToken: AST.Token
     , options: CheckListOptions = {}
     ): void => {
-      // Filter out null items (sparse arrays)
       const validItems = items.filter((i): i is Rule.Node => i !== null)
       if (validItems.length === 0) return
 
       const isMultiline = openToken.loc.end.line !== closeToken.loc.start.line ||
                           validItems.some(i => i.loc && i.loc.start.line !== i.loc.end.line)
       
-      const threshold = options.minItems ?? 4
-      if (!isMultiline && validItems.length < threshold) return
+      const tokenBeforeOpen = sourceCode.getTokenBefore(openToken)
+      const braceOnNewLine = tokenBeforeOpen && openToken.loc.start.line !== tokenBeforeOpen.loc.end.line
+      
+      let wallColumn = options.wallColumn
+      if (wallColumn === undefined) {
+        const first = validItems[0]
+        wallColumn = first ? first.loc!.start.column : openToken.loc.start.column
+      }
 
-      const parentBaseIndent = options.parentIndent !== undefined ? options.parentIndent : getIndent(openToken)
-      const wallIndent = parentBaseIndent + ' '.repeat(options.wallOffset || 0)
-      const firstItemIndent = wallIndent + (options.isParams || options.isArgs ? '  ' : '')
+      const wallIndent = ' '.repeat(wallColumn)
 
       // 1. First Item
       const first = validItems[0]
       if (first && first.range && openToken.range) {
-        const textBefore = sourceCode.getText().substring(openToken.range[1], first.range[0])
-        if (options.newlineFirst) {
-          const exp = '\n' + firstItemIndent
-          const normalizedText = textBefore.replace(/^[^\n]*\n/, '\n')
-          if (normalizedText !== exp && textBefore !== exp) {
+        if (braceOnNewLine) {
+          if (first.loc!.start.line !== openToken.loc.end.line) {
             context.report({
               node: first
-            , message: 'Newline needed'
-            , fix: f => f.replaceTextRange([openToken.range![1], first.range![0]], exp)
+            , message: 'First item must stand on the same line as the brace'
+            , fix: f => f.replaceTextRange([openToken.range![1], first.range![0]], ' ')
             })
-          }
-        } else {
-          if (textBefore.includes('\n')) {
-            const exp = '\n' + firstItemIndent
-            const lastLine = textBefore.substring(textBefore.lastIndexOf('\n'))
-            if (lastLine !== exp) {
+          } else {
+            const textBetween = sourceCode.getText().substring(openToken.range![1], first.range![0])
+            if (textBetween !== ' ' && !options.isParams && !options.isArgs) {
               context.report({
                 node: first
-              , message: 'Indent mismatch'
-                , fix: f => f.replaceTextRange([openToken.range![1], first.range![0]], exp)
+              , message: 'First item must have 1 space after brace (Newline Brace)'
+              , fix: f => f.replaceTextRange([openToken.range![1], first.range![0]], ' ')
               })
             }
-          } else if (textBefore !== ' ' && textBefore !== ' \n' && textBefore !== '\n') {
-            context.report({
-              node: first
-            , message: 'Pull-up required'
+          }
+        } else {
+          const textBefore = sourceCode.getText().substring(openToken.range[1], first.range[0])
+          if (first.loc!.start.line === openToken.loc.end.line) {
+            if (isMultiline && (options.isArgs || options.isParams)) {
+              if (textBefore !== ' ') {
+                context.report({
+                  node: first
+                , message: 'Space required (Alignment for Multiline Args)'
+                , fix: f => f.replaceTextRange([openToken.range![1], first.range![0]], ' ')
+                })
+              }
+            } else if (textBefore !== '' && textBefore !== ' ') {
+              context.report({
+                node: first
+              , message: 'Invalid spacing (0 or 1 space allowed)'
               , fix: f => f.replaceTextRange([openToken.range![1], first.range![0]], ' ')
-            })
+              })
+            }
+          } else {
+            const targetCol = wallColumn + 2
+            if (first.loc!.start.column !== targetCol) {
+              const replacement = '\n' + ' '.repeat(targetCol)
+              context.report({
+                node: first
+              , message: 'Incorrect indentation for hanging item (Virtual Comma)'
+              , fix: f => f.replaceTextRange([openToken.range![1], first.range![0]], replacement)
+              })
+            }
           }
         }
       }
 
       // 2. Subsequent Items
-      // Using slice/forEach to avoid ZEM-forbidden for-loops
       validItems.slice(1).forEach((item, idx) => {
-        const prev = validItems[idx] // idx corresponds to original current-1 because of slice(1)
+        const prev = validItems[idx]
         if (!item || !prev || !item.range || !prev.range) return
 
-        const expected = '\n' + wallIndent + ', '
+        const expected = isMultiline ? ('\n' + wallIndent + ', ') : ', '
         const range: [number, number] = [prev.range[1], item.range[0]]
         if (sourceCode.getText().substring(range[0], range[1]) !== expected) {
           context.report({
@@ -126,39 +147,44 @@ export const leadingCommas: Rule.RuleModule = {
       })
 
       // 4. Closing token
-      const last = validItems[validItems.length - 1]
-      if (!last || !last.range || !closeToken.range) return
-      const expectedClose = '\n' + parentBaseIndent
-      const lastEnd = last.range[1]
-      const closeStart = closeToken.range[0]
-      if (sourceCode.getText().substring(lastEnd, closeStart) !== expectedClose) {
-        context.report({
-          node: closeToken
-        , message: 'Close alignment'
-        , fix: f => f.replaceTextRange([lastEnd, closeStart], expectedClose)
-        })
+      if (closeToken.loc.start.line !== openToken.loc.start.line) {
+        const closeIndent = options.closeIndent !== undefined ? options.closeIndent : wallColumn
+        const expectedClose = '\n' + ' '.repeat(closeIndent)
+        const tokenBeforeClose = sourceCode.getTokenBefore(closeToken)
+        if (tokenBeforeClose && closeToken.range) {
+          const range: [number, number] = [tokenBeforeClose.range[1], closeToken.range[0]]
+          if (sourceCode.getText().substring(range[0], range[1]) !== expectedClose) {
+            context.report({
+              node: closeToken
+            , message: 'Close alignment'
+            , fix: f => f.replaceTextRange(range, expectedClose)
+            })
+          }
+        }
       }
     }
 
-    const ensureSplit = (node: Rule.Node, markerNode: Rule.Node, offset = 0): number => {
+    const ensureSplit = (node: Rule.Node, markerNode: Rule.Node, itemCount: number, isCall = false): number => {
+      if (isCall) return 0
+      if (itemCount <= 1) return 0
+
       const openToken = sourceCode.getFirstToken(node)
       if (!openToken) return 0
       const tokenBefore = sourceCode.getTokenBefore(openToken)
       if (!tokenBefore) return 0
-      const textBefore = sourceCode.getText().substring(tokenBefore.range[1], openToken.range[0])
       
-      const indent = getIndent(markerNode)
-      if (textBefore.includes('\n')) {
-        const expected = '\n' + indent + ' '.repeat(offset)
-        if (textBefore !== expected) {
-          context.report({
-            node: openToken
-          , message: 'Split indent'
-          , fix: f => f.replaceTextRange([tokenBefore.range[1], openToken.range[0]], expected)
-          })
-        }
+      const textBefore = sourceCode.getText().substring(tokenBefore.range[1], openToken.range[0])
+      if (textBefore.trim().length > 0) return 0
+
+      const expected = '\n' + ' '.repeat(markerNode.loc!.start.column)
+      if (textBefore !== expected) {
+        context.report({
+          node: openToken
+        , message: 'Break before brace (Multi-Item)'
+        , fix: f => f.replaceTextRange([tokenBefore.range[1], openToken.range[0]], expected)
+        })
       }
-      return indent.length + offset
+      return markerNode.loc!.start.column
     }
 
     const checkFunc = (node: Rule.Node): void => {
@@ -166,42 +192,82 @@ export const leadingCommas: Rule.RuleModule = {
       let open: AST.Token | undefined
       let close: AST.Token | undefined
       
-      if (isArrow) {
-        // ArrowFunctionExpression body can be a block or an expression
-        const arrowBody = (node as any).body
-        const tokens = sourceCode.getTokensBefore(arrowBody)
-        // Find the last set of parens before the arrow body
-        open = [...tokens].reverse().find(t => t.value === '(')
-        close = [...tokens].reverse().find(t => t.value === ')')
-      } else {
-        const id = (node as any).id
-        const body = (node as any).body
-        const tokens = sourceCode.getTokensBetween(id || node, body)
-        open = tokens.find(t => t.value === '(')
-        close = tokens.find(t => t.value === ')')
-      }
-      
       const params = (node as any).params as Rule.Node[]
-      if (open && close && params.length > 0) {
-        checkList(node, params, open, close, { 
-          isParams: true
-        , newlineFirst: true
-        , parentIndent: getIndent(node)
-        , wallOffset: 2
-        , minItems: 4 
-        })
+      if (params.length > 0) {
+        open = sourceCode.getTokenBefore(params[0]) || undefined
+        close = sourceCode.getTokenAfter(params[params.length - 1]) || undefined
+        
+        if (open && close) {
+          const first = params[0]
+          const isFirstInline = first.loc!.start.line === open.loc.start.line
+          const nodeIndent = getIndentSize(node)
+          const wallColumn = isFirstInline ? open.loc.start.column : (nodeIndent + 2)
+          
+          checkList(node, params, open, close, { 
+            isParams: true
+          , wallColumn: wallColumn
+          , closeIndent: nodeIndent
+          , newlineFirst: !isFirstInline
+          , minItems: 0 
+          })
+        }
       }
       
       if (!isArrow) {
         const body = (node as any).body
-        const brace = sourceCode.getFirstToken(body)
-        if (brace && close) {
-          const text = sourceCode.getText().substring(close.range[1], brace.range[0])
-          if (text !== ' ') {
+        if (body) {
+          const brace = sourceCode.getFirstToken(body)
+          const closeToken = close || (sourceCode.getTokensBefore(body).reverse().find(t => t.value === ')') as AST.Token)
+          if (brace && closeToken) {
+            const text = sourceCode.getText().substring(closeToken.range[1], brace.range[0])
+            if (text !== ' ') {
+              context.report({
+                node: body
+              , message: 'Space before {'
+              , fix: f => f.replaceTextRange([closeToken.range[1], brace.range[0]], ' ')
+              })
+            }
+          }
+        }
+      }
+    }
+
+    const checkControlFlow = (node: Rule.Node): void => {
+      const firstToken = sourceCode.getFirstToken(node)
+      if (!firstToken) return
+      
+      let searchNode = firstToken
+      if (node.type === 'CatchClause' && (node as any).param) {
+         searchNode = sourceCode.getTokenBefore((node as any).param) || firstToken
+      }
+
+      const openToken = sourceCode.getTokenAfter(searchNode, { filter: t => t.value === '(' })
+      if (!openToken) return
+      
+      const closeToken = sourceCode.getLastToken(node, { filter: t => t.value === ')' })
+      if (!closeToken) return
+
+      const nextToken = sourceCode.getTokenAfter(openToken)
+      if (nextToken && nextToken.range[0] < closeToken.range[0]) {
+        const textAfterOpen = sourceCode.getText().substring(openToken.range[1], nextToken.range[0])
+        if (textAfterOpen !== '') {
+          context.report({
+            node: node
+          , loc: openToken.loc
+          , message: 'No space allowed in control flow (start)'
+          , fix: f => f.replaceTextRange([openToken.range[1], nextToken.range[0]], '')
+          })
+        }
+
+        const prevToken = sourceCode.getTokenBefore(closeToken)
+        if (prevToken) {
+          const textBeforeClose = sourceCode.getText().substring(prevToken.range[1], closeToken.range[0])
+          if (textBeforeClose !== '') {
             context.report({
-              node: body
-            , message: 'Space before {'
-            , fix: f => f.replaceTextRange([close.range[1], brace.range[0]], ' ')
+              node: node
+            , loc: closeToken.loc
+            , message: 'No space allowed in control flow (end)'
+            , fix: f => f.replaceTextRange([prevToken.range[1], closeToken.range[0]], '')
             })
           }
         }
@@ -210,93 +276,85 @@ export const leadingCommas: Rule.RuleModule = {
 
     return {
       ObjectExpression(node: Rule.Node & { properties: any[] }) {
+        const p = node.parent
+        if (!p || p.type === 'CallExpression') return
+
         const open = sourceCode.getFirstToken(node)
         const close = sourceCode.getLastToken(node)
-        if (!open || !close || !open.range || !close.range) return
-        
-        const p = node.parent
-        if (!p) return
+        if (!open || !close) return
 
-        let baseIndent = getIndent(open)
-        let wallOffset = 0
+        let wallColumn = 0
+        if (p.type === 'VariableDeclarator') wallColumn = ensureSplit(node, p.parent as Rule.Node, node.properties.length)
+        else if (p.type === 'Property') wallColumn = ensureSplit(node, (p as any).key as Rule.Node, node.properties.length)
+        else if (p.type === 'AssignmentPattern') wallColumn = ensureSplit(node, (p as any).left as Rule.Node, node.properties.length)
+        else if (p.type === 'AssignmentExpression') wallColumn = ensureSplit(node, (p as any).left as Rule.Node, node.properties.length)
+        else wallColumn = open.loc.start.column
 
-        if (p.type === 'VariableDeclarator') {
-          ensureSplit(node, p.parent as Rule.Node, 0)
-        } else if (p.type === 'Property') {
-          const property = p as any
-          const splitCol = ensureSplit(node, property.key as Rule.Node, 2)
-          const tokenBeforeOpen = sourceCode.getTokenBefore(open)
-          if (tokenBeforeOpen && tokenBeforeOpen.loc.end.line !== open.loc.start.line) {
-            baseIndent = ' '.repeat(splitCol)
-            wallOffset = 0
-          } else {
-            baseIndent = getIndent(property.key as Rule.Node)
-            wallOffset = 2
-          }
-        } else if (p.type === 'AssignmentPattern') {
-          ensureSplit(node, (p as any).left as Rule.Node, 2)
-        } else if (p.type === 'AssignmentExpression') {
-          ensureSplit(node, (p as any).left as Rule.Node, 0)
-        }
+        const tokenBeforeOpen = sourceCode.getTokenBefore(open)
+        const braceOnNewLine = tokenBeforeOpen && open.loc.start.line !== tokenBeforeOpen.loc.end.line
         
-        // Array parent: strict alignment with the opening brace column + 2
-        if (p.type === 'ArrayExpression') {
-          wallOffset = 2
-          baseIndent = ' '.repeat(open.loc.start.column)
+        if (!braceOnNewLine) {
+          wallColumn = getIndentSize(node) + 2
         }
-        
+
         checkList(node, node.properties, open, close, { 
-          newlineFirst: false
-        , wallOffset: wallOffset
-        , minItems: 4
-        , parentIndent: baseIndent 
+          wallColumn: wallColumn
+        , newlineFirst: !braceOnNewLine
+        , minItems: 4 
         })
       },
 
       ArrayExpression(node: Rule.Node & { elements: any[] }) {
+        const p = node.parent
+        if (!p || p.type === 'CallExpression') return
+
         const open = sourceCode.getFirstToken(node)
         const close = sourceCode.getLastToken(node)
-        if (!open || !close || !open.range || !close.range) return
+        if (!open || !close) return
+
+        let wallColumn = 0
+        if (p.type === 'VariableDeclarator') wallColumn = ensureSplit(node, p.parent as Rule.Node, node.elements.length)
+        else if (p.type === 'Property') wallColumn = ensureSplit(node, (p as any).key as Rule.Node, node.elements.length)
+        else if (p.type === 'AssignmentExpression') wallColumn = ensureSplit(node, (p as any).left as Rule.Node, node.elements.length)
+        else wallColumn = open.loc.start.column
+
+        const tokenBeforeOpen = sourceCode.getTokenBefore(open)
+        const braceOnNewLine = tokenBeforeOpen && open.loc.start.line !== tokenBeforeOpen.loc.end.line
         
-        const p = node.parent
-        if (!p) return
-
-        let baseIndent = getIndent(open)
-        let wallOffset = 0
-
-        if (p.type === 'VariableDeclarator') {
-          ensureSplit(node, p.parent as Rule.Node, 0)
-        } else if (p.type === 'Property') {
-          const property = p as any
-          const splitCol = ensureSplit(node, property.key as Rule.Node, 2)
-          const tokenBeforeOpen = sourceCode.getTokenBefore(open)
-          if (tokenBeforeOpen && tokenBeforeOpen.loc.end.line !== open.loc.start.line) {
-            baseIndent = ' '.repeat(splitCol)
-            wallOffset = 0
-          } else {
-            baseIndent = getIndent(property.key as Rule.Node)
-            wallOffset = 2
-          }
-        } else if (p.type === 'AssignmentExpression') {
-          ensureSplit(node, (p as any).left as Rule.Node, 0)
+        if (!braceOnNewLine) {
+          wallColumn = getIndentSize(node)
         }
-        
+
         checkList(node, node.elements, open, close, { 
-          wallOffset: wallOffset
-        , newlineFirst: false
-        , minItems: 4
-        , parentIndent: baseIndent 
+          wallColumn: wallColumn
+        , newlineFirst: !braceOnNewLine
+        , minItems: 4 
         })
       },
 
       CallExpression(node: Rule.Node & { callee: any, arguments: any[] }) {
         const open = sourceCode.getTokenAfter(node.callee)
         const close = sourceCode.getLastToken(node)
-        if (open && open.value === '(' && close) {
+        if (open && open.value === '(' && close && node.arguments.length > 0) {
+          const first = node.arguments[0]
+          const isFirstInline = first.loc!.start.line === open.loc.start.line
+          
+          if (!isFirstInline) {
+            const tokenBeforeFirst = sourceCode.getTokenBefore(first)
+            if (tokenBeforeFirst === open) {
+              context.report({
+                node: first
+              , message: 'Function call arguments must start inline'
+              , fix: f => f.replaceTextRange([open.range![1], first.range![0]], ' ')
+              })
+            }
+          }
+
+          const wallColumn = open.loc.start.column
           checkList(node, node.arguments, open, close, { 
-            wallOffset: 2
-          , newlineFirst: false
-          , minItems: 4
+            wallColumn: wallColumn
+          , newlineFirst: !isFirstInline
+          , minItems: 0
           , isArgs: true 
           })
         }
@@ -305,6 +363,11 @@ export const leadingCommas: Rule.RuleModule = {
       FunctionDeclaration: checkFunc,
       FunctionExpression: checkFunc,
       ArrowFunctionExpression: checkFunc,
+      
+      IfStatement: checkControlFlow,
+      WhileStatement: checkControlFlow,
+      SwitchStatement: checkControlFlow,
+      CatchClause: checkControlFlow
     }
   },
 }
