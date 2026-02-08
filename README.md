@@ -47,10 +47,11 @@ import { Ok, Err, chain, map } from '@metagrapher/zem'
 const safeDivision = (a: number, b: number) => 
   b === 0 ? Err('DIVIDE_BY_ZERO') : Ok(a / b)
 
-// Direct Transformation
 const result = safeDivision(10, 2)
 const next = map(result, n => n + 5) // Ok(10)
 ```
+
+> **Note**: This pattern is known as **[Railway Oriented Programming](https://fsharpforfunandprofit.com/rop/)**. The `map` function keeps you on the "success track". If an error occurs, the code switches to the "failure track" and skips subsequent operations safely.
 
 ### Why is this better?
 
