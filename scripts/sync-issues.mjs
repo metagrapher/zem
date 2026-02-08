@@ -85,18 +85,26 @@ const sync = async () => {
     const { attributes, body } = fm(content)
     const title = attributes.title || body.split('\n')[0].replace(/^#\s(Issue\s\d+:\s)?/, '').trim()
     const isClosedRequest = attributes.status === 'CLOSED' || filePath.includes('/CLOSED/')
-    let status = isClosedRequest ? 'CLOSED' : (attributes.status || 'OPEN')
+    const isInProgressRequest = attributes.status === 'IN_PROGRESS' || filePath.includes('/IN_PROGRESS/')
+    let status = isClosedRequest ? 'CLOSED' : (isInProgressRequest ? 'IN_PROGRESS' : (attributes.status || 'OPEN'))
 
-    if (status === 'CLOSED') {
+    // Always verify if test_ref is present
+    if (attributes.test_ref) {
       const verification = verifyTests(attributes.test_ref)
-      if (!verification.ok) {
+      if (status === 'CLOSED' && !verification.ok) {
         console.warn(`[WARN] Issue ${file} cannot be CLOSED: ${verification.reason}. Moving to ${verification.status}.`)
         status = verification.status
+      } else if (status === 'OPEN' && verification.status === 'IN_PROGRESS') {
+        console.log(`[INFO] Issue ${file} promoted to IN_PROGRESS via TDD verification.`)
+        status = 'IN_PROGRESS'
+      } else if (status === 'IN_PROGRESS' && verification.status === 'OPEN') {
+        console.warn(`[WARN] Issue ${file} demoted to OPEN: TDD proof no longer passing.`)
+        status = 'OPEN'
       }
     }
 
     // Determine correct directory
-    const targetDir = status === 'CLOSED' ? 'CLOSED' : 'OPEN'
+    const targetDir = status === 'CLOSED' ? 'CLOSED' : (status === 'IN_PROGRESS' ? 'IN_PROGRESS' : 'OPEN')
     const targetPath = path.join(ISSUES_DIR, targetDir, path.basename(filePath))
 
     if (filePath !== targetPath) {
@@ -120,12 +128,17 @@ const sync = async () => {
     }
     if (!gh_number) {
       console.log(`Creating issue for ${file}...`);
+      const labels = Array.isArray(attributes.labels) ? [...attributes.labels] : []
+      if (status === 'IN_PROGRESS' && !labels.includes('in-progress')) {
+        labels.push('in-progress')
+      }
+
       const result = await atomicAsync(() => octokit.issues.create({
         owner,
         repo,
         title: title,
         body: body,
-        labels: attributes.labels || []
+        labels: labels
       }));
       if (result.ok) {
         gh_number = result.value.data.number;
@@ -136,13 +149,18 @@ const sync = async () => {
       }
     } else {
       console.log(`Updating issue #${gh_number}...`);
+      const labels = Array.isArray(attributes.labels) ? [...attributes.labels] : []
+      if (status === 'IN_PROGRESS' && !labels.includes('in-progress')) {
+        labels.push('in-progress')
+      }
+
       const result = await atomicAsync(() => octokit.issues.update({
         owner,
         repo,
         issue_number: gh_number,
         title: title,
         body: body,
-        labels: attributes.labels || [],
+        labels: labels,
         state: (status === 'CLOSED' ? 'closed' : 'open')
       }));
       if (!result.ok) {

@@ -14,6 +14,7 @@ The issue synchronization script and workflow are not correctly handling the sub
 ## Tasks
 - [x] Implement recursive file search in `scripts/sync-issues.mjs`
 - [x] Update `.github/workflows/issue-sync.yml` to track subdirectories
-- [x] Support metadata extraction from markdown body if front-matter is missing
-- [x] Verify logic with recursive discovery test
-- [x] Ensure CLOSED issues are correctly synced to GitHub 'closed' state
+- [x] Support status transitions (`OPEN` <-> `IN_PROGRESS` <-> `CLOSED`)
+- [x] Implement TDD verification for `IN_PROGRESS` status
+- [x] Automate file movement between `OPEN/`, `IN_PROGRESS/`, and `CLOSED/` folders
+- [x] Sync `in-progress` label to GitHub
