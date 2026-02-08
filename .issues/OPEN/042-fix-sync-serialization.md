@@ -1,9 +1,10 @@
 ---
-title: Fix Sync Issues Serialization and Validation Errors
+title: "Fix Sync Issues Serialization and Validation Errors"
 status: OPEN
 test_ref: tests/issue-032.test.mjs
+verification: FAIL
+gh_number: 42
 ---
-
 # Objective
 Resolve persistent errors in the `sync-issues` script related to YAML serialization and GitHub API validation.
 
