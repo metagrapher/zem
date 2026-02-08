@@ -153,8 +153,11 @@ const sync = async () => {
     } else {
       console.log(`Updating issue #${gh_number}...`);
       const labels = Array.isArray(attributes.labels) ? [...attributes.labels] : []
-      if (status === 'IN_PROGRESS' && !labels.includes('in-progress')) {
-        labels.push('in-progress')
+      if (status === 'IN_PROGRESS') {
+        if (!labels.includes('in progress')) labels.push('in progress')
+      } else {
+        const index = labels.indexOf('in progress')
+        if (index > -1) labels.splice(index, 1)
       }
 
       const result = await atomicAsync(() => octokit.issues.update({
