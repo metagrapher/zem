@@ -117,6 +117,7 @@ export default [
 ];
 ```
 
+
 ### ⚙️ 3. The Process CLI (`zem`)
 Automate the rigorous workflow.
 
@@ -169,6 +170,7 @@ This script:
 3. **Automatically Scaffolds** tailored `.test.ts` files with named imports and basic verification suites.
 
 ---
+
 
 **ZEM** is the standard for high-reliability engineering.
 See [SPECIFICATION.md](./docs/SPECIFICATION.md) for deeper architectural details and [INSPIRATION.md](./docs/INSPIRATION.md) for our engineering standards.
