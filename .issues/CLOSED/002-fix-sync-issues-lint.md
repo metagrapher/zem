@@ -13,3 +13,4 @@ The `scripts/sync-issues.mjs` file had 11 linting errors because `.mjs` files we
 - [x] Verify linting passes
 - [x] Run full audit
 - [x] Close issue and create PR
+
