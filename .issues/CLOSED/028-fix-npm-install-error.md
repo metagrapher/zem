@@ -1,7 +1,7 @@
 ---
 title: Fix npm install failure caused by missing @types/front-matter
-status: IN_PROGRESS
-test_ref: tests/028-npm-install-proof.test.mjs
+status: CLOSED
+test_ref: tests/issue-028.test.mjs
 ---
 
 ## Description
@@ -11,7 +11,7 @@ CI is failing because `@types/front-matter` is not found in the npm registry. Lo
 - [x] Remove `@types/front-matter` from `package.json` and `package-lock.json`.
 - [x] Verify that `front-matter` types are correctly picked up from the package itself.
 - [x] Ensure `npm install` and `npm run zem` work correctly.
-- [ ] Commit changes with cryptographic signature.
+- [x] Commit changes with cryptographic signature.
 
 ## Test Proof
 - **Test A (The Solution)**: `npm install` should succeed in a clean environment.
