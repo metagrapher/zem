@@ -1,8 +1,8 @@
 ---
-title: Refine README to Articulate ZEM Methodology & Toolkit Cohesion
+title: "Refine README to Articulate ZEM Methodology & Toolkit Cohesion"
 status: OPEN
+gh_number: 35
 ---
-
 ## Description
 The current `README.md` presents `zem` as a collection of disjointed tools (runtime lib, linter, CLI). We need to rewrite it to present `zem` as a cohesive **Methodology** where each tool serves a specific Tenet.
 

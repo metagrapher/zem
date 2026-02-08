@@ -1,8 +1,8 @@
 ---
-title: RFC: Data-Last Transformation API for Pipelining
+title: "RFC: Data-Last Transformation API for Pipelining"
 status: OPEN
+gh_number: 32
 ---
-
 ## Context
 Functional programming ergonomics heavily favor "Data-Last" arguments to enable currying and pipelining. Currently, ZEM's core algebra functions (`chain`, `map`, `fold`) are "Data-First" (`(result, fn)`), which makes `pipe` composition verbose or impossible without lambda wrappers.
 

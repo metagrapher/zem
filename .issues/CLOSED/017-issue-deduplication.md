@@ -1,5 +1,5 @@
 ---
-title: Implement issue deduplication check in pre-commit hook
+title: "Implement issue deduplication check in pre-commit hook"
 status: CLOSED
 gh_number: 17
 test_ref: src/logic/dedupe.test.ts

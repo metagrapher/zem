@@ -1,8 +1,8 @@
 ---
-title: Fix `pipe` returning `any` (loss of type safety)
+title: "Fix `pipe` returning `any` (loss of type safety)"
 status: OPEN
+gh_number: 33
 ---
-
 ## Context
 The current implementation of `pipe` in `src/logic/composition.ts` returns `any`:
 
